@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace KATE_text_game
         int health = 10;
 
         public Player(Location loc) { this.loc = loc; }
-        public Location Loc { get => loc; }
+        public Location Loc { get => loc; set => loc = value; }
 
     }
 
@@ -69,15 +70,17 @@ namespace KATE_text_game
             Location house = new Location("house", "a small wooden house", new string[] { "field" });
             Location field = new Location("field", "a field", new string[] { "house", "forest" });
             Location forest = new Location("forest", "a dense forest", new string[] { "field" });
+            Location village = new Location("village", "a cute village", new string[] { });
 
-            Location[] allLocations = new Location[] { field, house, forest };
+            Location[] allLocations = new Location[] { field, house, forest, village };
 
             Item hat = new Item("HAT", "an old straw hat", "field");
             Item sword = new Item("SWORD", "a rusty sword", "house");
 
             Player player = new Player(field);
 
-            int FindLoc(string searchWord)
+            // finds a location in the array allLocations by only a string
+            int FindLocInAllLocs(string searchWord)
             {
                 int index = 0;
 
@@ -86,6 +89,7 @@ namespace KATE_text_game
                 if (player.Loc.LocsAvbl.Contains(searchWord))
                 {
                     // find it in all locations
+
                     for (; index < allLocations.Length; index++)
                     {
                         if (searchWord == allLocations[index].Name)
@@ -120,18 +124,29 @@ namespace KATE_text_game
                 }
                 return false;
             }
-            bool ExecuteLook(string where)
+            bool ExecuteLook(string dest)
             {
-
-                if (where == "around")
-                    Console.WriteLine("You are in " + player.Loc.Desc);
+                if (dest == "around" || dest == player.Loc.Name)
+                    Console.WriteLine("You are in " + player.Loc.Desc + ".");
                 else
                 {
-                    int index = FindLoc(where);
+                    int index = FindLocInAllLocs(dest);
                     if (index != -1)
                         Console.WriteLine("You see " + allLocations[index].Desc + ".");
+                    else
+                        Console.WriteLine("ERROR");
                 }
 
+                return true;
+            }
+            bool ExecuteGo(string dest)
+            {
+                int index = FindLocInAllLocs(dest);
+                if (index != -1)
+                {
+                    Console.WriteLine("You go in " + allLocations[index].Desc + ".");
+                    player.Loc = allLocations[index];
+                }
                 return true;
             }
 
@@ -147,34 +162,32 @@ namespace KATE_text_game
 
             bool ParseAndExecute(string Input)
             {
-                int inpWordNum;
                 string[] inpTok = Input.Split(' ');
+                string action = inpTok[0];
 
-                if (inpTok.Length == 1)
+                if (inpTok.Length > 2)
                 {
-                    inpWordNum = 1;
-                    //Console.WriteLine("There is only one word: " + inpTok[0]);
-                }
-                else if (inpTok.Length == 2)
-                {
-                    inpWordNum = 2;
-                    //Console.WriteLine($"There are two words: {inpTok[0]} and {inpTok[1]}");
-                }
-                else
-                {
-                    inpWordNum = 3;
-                    Console.WriteLine("There are too many words");
+                    Console.WriteLine("There are too many words.");
                     return true;
                 }
 
-                if (inpTok[0] == "look")
+                string dest = inpTok[1];
+
+                if (action == "look")
                 {
-                    if (inpWordNum == 1)
-                        Console.WriteLine("Where should I look?");
+                    if (inpTok.Length == 1)
+                        Console.WriteLine($"Where should I {action}?");
                     else
-                        ExecuteLook(inpTok[1]);
+                        ExecuteLook(dest);
                 }
-                else if (inpTok[0] == "quit")
+                else if (action == "go")
+                {
+                    if (inpTok.Length == 1)
+                        Console.WriteLine($"Where should I {action}?");
+                    else
+                        ExecuteGo(dest);
+                }
+                else if (action == "quit")
                 {
                     if (ExecuteQuitGame())
                         return false;
@@ -186,7 +199,6 @@ namespace KATE_text_game
 
                 return true;
             }
-
 
 
             Console.WriteLine("You wake up.");

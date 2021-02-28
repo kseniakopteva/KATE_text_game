@@ -7,6 +7,59 @@ using System.Threading.Tasks;
 
 namespace KATE_text_game
 {
+    class Player
+    {
+        string[] inventory;
+        Location loc;
+        int health = 10;
+
+        public Player(Location loc) { this.loc = loc; }
+        public Location Loc { get => loc; }
+
+    }
+
+    class Item
+    {
+        string name;
+        string desc;
+        string loc;
+
+        public Item(string name, string desc, string loc)
+        {
+            this.name = name;
+            this.desc = desc;
+        }
+        public string Name
+        {
+            get => name;
+        }
+        public string Desc { get => desc; }
+
+        void LookAt()
+        {
+            Console.WriteLine(desc);
+        }
+    }
+
+    class Location
+    {
+        string name;
+        string desc;
+        string[] locsAvbl;
+
+        public Location(string name, string desc, string[] locsAvbl)
+        {
+            this.name = name;
+            this.desc = desc;
+            this.locsAvbl = locsAvbl;
+        }
+
+        public string Name { get => name; }
+        public string Desc { get => desc; }
+        public string[] LocsAvbl { get => locsAvbl; set => locsAvbl = value; }
+
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -83,7 +136,24 @@ namespace KATE_text_game
                 return true;
             }
 
+            // house, N - forest with lighthouse, E - forest with cave, S - hill with village, W - flowerfield with windmill
+
+            Location house = new Location("house", "a small wooden house", new string[] { "field" });
+            Location field = new Location("field", "a field", new string[] { "house", "forest" });
+
+            Item hat = new Item("HAT", "an old straw hat", "field");
+            Item sword = new Item("SWORD", "a rusty sword", "house");
+
+            Player player = new Player(field);
+
             Console.WriteLine("You wake up.");
+            Console.WriteLine("You are in " + player.Loc.Desc + ".");
+            Console.WriteLine("You can go to: ");
+            for (int i = 0; i < player.Loc.LocsAvbl.Length; i++)
+            {
+                Console.WriteLine(player.Loc.LocsAvbl[i]);
+            }
+
             while (GetInput() && ParseAndExecute(input)) ;
             Console.WriteLine("Bye!");
             Thread.Sleep(600);

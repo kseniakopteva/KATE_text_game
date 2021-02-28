@@ -43,16 +43,43 @@ namespace KATE_text_game
 
             bool ParseAndExecute(string Input)
             {
-                string[] inputTokens = Input.Split(' ');
-                if (inputTokens[0] == "look")
+                int inpWordNum;
+                string[] inpTok = Input.Split(' ');
+
+                if (inpTok.Length == 1)
                 {
-                    Console.WriteLine("I am looking.");
+                    inpWordNum = 1;
+                    //Console.WriteLine("There is only one word: " + inpTok[0]);
                 }
-                else if (inputTokens[0] == "quit")
+                else if (inpTok.Length == 2)
+                {
+                    inpWordNum = 2;
+                    //Console.WriteLine($"There are two words: {inpTok[0]} and {inpTok[1]}");
+                }
+                else
+                {
+                    inpWordNum = 3;
+                    Console.WriteLine("There are too many words");
+                    return true;
+                }
+
+                if (inpTok[0] == "look")
+                {
+                    if (inpWordNum == 1)
+                        Console.WriteLine("Where should I look?");
+                    else if (inpWordNum == 2)
+                        Console.WriteLine("I am looking " + inpTok[1]);
+                }
+                else if (inpTok[0] == "quit")
                 {
                     if (QuitGame())
                         return false;
                 }
+                else
+                {
+                    Console.WriteLine("I don't understand what you are saying.");
+                }
+
                 return true;
             }
 

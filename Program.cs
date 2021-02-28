@@ -64,7 +64,44 @@ namespace KATE_text_game
     {
         static void Main(string[] args)
         {
-            bool QuitGame()
+            // house, N - forest with lighthouse, E - forest with cave, S - hill with village, W - flowerfield with windmill
+
+            Location house = new Location("house", "a small wooden house", new string[] { "field" });
+            Location field = new Location("field", "a field", new string[] { "house", "forest" });
+            Location forest = new Location("forest", "a dense forest", new string[] { "field" });
+
+            Location[] allLocations = new Location[] { field, house, forest };
+
+            Item hat = new Item("HAT", "an old straw hat", "field");
+            Item sword = new Item("SWORD", "a rusty sword", "house");
+
+            Player player = new Player(field);
+
+            int FindLoc(string searchWord)
+            {
+                int index = 0;
+
+                // check whether the word is available
+
+                if (player.Loc.LocsAvbl.Contains(searchWord))
+                {
+                    // find it in all locations
+                    for (; index < allLocations.Length; index++)
+                    {
+                        if (searchWord == allLocations[index].Name)
+                        {
+                            return index;
+                        }
+                    }
+                }
+
+                // somehow find it description
+                //allLocations[index].Desc;
+
+                return -1;
+            }
+
+            bool ExecuteQuitGame()
             {
                 Console.WriteLine("Are you sure? Y/N");
 
@@ -82,6 +119,20 @@ namespace KATE_text_game
                     return true;
                 }
                 return false;
+            }
+            bool ExecuteLook(string where)
+            {
+
+                if (where == "around")
+                    Console.WriteLine("You are in " + player.Loc.Desc);
+                else
+                {
+                    int index = FindLoc(where);
+                    if (index != -1)
+                        Console.WriteLine("You see " + allLocations[index].Desc + ".");
+                }
+
+                return true;
             }
 
             string input = "placeholder";
@@ -120,12 +171,12 @@ namespace KATE_text_game
                 {
                     if (inpWordNum == 1)
                         Console.WriteLine("Where should I look?");
-                    else if (inpWordNum == 2)
-                        Console.WriteLine("I am looking " + inpTok[1]);
+                    else
+                        ExecuteLook(inpTok[1]);
                 }
                 else if (inpTok[0] == "quit")
                 {
-                    if (QuitGame())
+                    if (ExecuteQuitGame())
                         return false;
                 }
                 else
@@ -136,21 +187,14 @@ namespace KATE_text_game
                 return true;
             }
 
-            // house, N - forest with lighthouse, E - forest with cave, S - hill with village, W - flowerfield with windmill
 
-            Location house = new Location("house", "a small wooden house", new string[] { "field" });
-            Location field = new Location("field", "a field", new string[] { "house", "forest" });
-
-            Item hat = new Item("HAT", "an old straw hat", "field");
-            Item sword = new Item("SWORD", "a rusty sword", "house");
-
-            Player player = new Player(field);
 
             Console.WriteLine("You wake up.");
             Console.WriteLine("You are in " + player.Loc.Desc + ".");
             Console.WriteLine("You can go to: ");
             for (int i = 0; i < player.Loc.LocsAvbl.Length; i++)
             {
+                Console.Write("- ");
                 Console.WriteLine(player.Loc.LocsAvbl[i]);
             }
 

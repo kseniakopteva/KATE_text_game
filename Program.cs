@@ -67,12 +67,19 @@ namespace KATE_text_game
         {
             // house, N - forest with lighthouse, E - forest with cave, S - hill with village, W - flowerfield with windmill
 
-            Location house = new Location("house", "a small wooden house", new string[] { "field" });
-            Location field = new Location("field", "a field", new string[] { "house", "forest" });
-            Location forest = new Location("forest", "a dense forest", new string[] { "field" });
-            Location village = new Location("village", "a cute village", new string[] { });
+            Location field = new Location("field", "a field", new string[] { "house", "forest", "hill", "meadow", "seaside" }),
+                     house = new Location("house", "a small wooden house", new string[] { "field" }),
+                     forest = new Location("forest", "a dense forest", new string[] { "field", "cave" }),
+                     village = new Location("village", "a cute village", new string[] { "cropfield", "hill" }),
+                     seaside = new Location("seaside", "a seaside with a few trees and a rocky beach", new string[] { "field", "lighthouse" }),
+                     meadow = new Location("meadow", "a flowery meadow", new string[] { "windmill", "field" }),
+                     windmill = new Location("windmill", "a windmill", new string[] { "meadow" }),
+                     hill = new Location("hill", "a grass hill", new string[] { "village", "field", "cropfield" }),
+                     cave = new Location("cave", "a dark cave", new string[] { "forest" }),
+                     lighthouse = new Location("lighthouse", "a sky-high black and white lighthouse", new string[] { "seaside" }),
+                     cropfield = new Location("cropfield", "a cropfield with wheat", new string[] { "hill", "village" });
 
-            Location[] allLocations = new Location[] { field, house, forest, village };
+            Location[] allLocations = new Location[] { field, house, forest, village, seaside, meadow, windmill, hill, cave, lighthouse, cropfield };
 
             Item hat = new Item("HAT", "an old straw hat", "field");
             Item sword = new Item("SWORD", "a rusty sword", "house");

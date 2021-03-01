@@ -197,7 +197,11 @@ namespace KATE_text_game
                     return true;
                 }
 
-                string dest = inpTok[1];
+                string dest = "";
+                if (inpTok.Length == 2)
+                {
+                    dest = inpTok[1];
+                }
 
                 if (action == "look")
                 {

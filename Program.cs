@@ -44,19 +44,20 @@ namespace KATE_text_game
 
     class Location
     {
+        string tag;
         string name;
         string desc;
         string[] locsAvbl;
 
-        public Location(string name, string desc, string[] locsAvbl)
+        public Location(string tag, string name, string[] locsAvbl)
         {
+            this.tag = tag;
             this.name = name;
-            this.desc = desc;
             this.locsAvbl = locsAvbl;
         }
 
         public string Name { get => name; }
-        public string Desc { get => desc; }
+        public string Desc { get => desc; set => desc = value; }
         public string[] LocsAvbl { get => locsAvbl; set => locsAvbl = value; }
 
     }
@@ -68,16 +69,29 @@ namespace KATE_text_game
             // house, N - forest with lighthouse, E - forest with cave, S - hill with village, W - flowerfield with windmill
 
             Location field = new Location("field", "a field", new string[] { "house", "forest", "hill", "meadow", "seaside" }),
-                     house = new Location("house", "a small wooden house", new string[] { "field" }),
-                     forest = new Location("forest", "a dense forest", new string[] { "field", "cave" }),
-                     village = new Location("village", "a cute village", new string[] { "cropfield", "hill" }),
-                     seaside = new Location("seaside", "a seaside with a few trees and a rocky beach", new string[] { "field", "lighthouse" }),
-                     meadow = new Location("meadow", "a flowery meadow", new string[] { "windmill", "field" }),
+                     house = new Location("house", "a house", new string[] { "field" }),
+                     forest = new Location("forest", "a forest", new string[] { "field", "cave" }),
+                     village = new Location("village", "a village", new string[] { "cropfield", "hill" }),
+                     seaside = new Location("seaside", "a seaside", new string[] { "field", "lighthouse" }),
+                     meadow = new Location("meadow", "a meadow", new string[] { "windmill", "field" }),
                      windmill = new Location("windmill", "a windmill", new string[] { "meadow" }),
-                     hill = new Location("hill", "a grass hill", new string[] { "village", "field", "cropfield" }),
-                     cave = new Location("cave", "a dark cave", new string[] { "forest" }),
-                     lighthouse = new Location("lighthouse", "a sky-high black and white lighthouse", new string[] { "seaside" }),
-                     cropfield = new Location("cropfield", "a cropfield with wheat", new string[] { "hill", "village" });
+                     hill = new Location("hill", "a hill", new string[] { "village", "field", "cropfield" }),
+                     cave = new Location("cave", "a cave", new string[] { "forest" }),
+                     lighthouse = new Location("lighthouse", "a lighthouse", new string[] { "seaside" }),
+                     cropfield = new Location("cropfield", "a cropfield", new string[] { "hill", "village" });
+
+            field.Desc = "It's a field with tall grass and yarrow. There is a small house nearby. There is a seaside north, a dense forest east, a grass hill south and a flower meadow west.";
+            house.Desc = "It's a small wooden house made out of thin wood planks. There are few lattice windows and a table with a note. There is a chest next to one of the walls.";
+            forest.Desc = "It's a dense forest with barely any light. There is a cave in the raised ground.";
+            village.Desc = "It's a small village with quite a few people.";
+            seaside.Desc = "It's a seaside with a few trees and a rocky beach. You hear the sea waves crushing on the shore. It is windy out here. You see a sky-high black and white lighthouse.";
+            meadow.Desc = "It's a colourful flower meadow. There is a windmill.";
+            windmill.Desc = "It's an old but tidy windmill. You can see it is still being used. The sunbeams shine through the gaps in the wallboards.";
+            hill.Desc = "It's a grass hill. You can see the field, a cropfield, and the village from here. What a view.";
+            cave.Desc = "It's a dark cave.";
+            lighthouse.Desc = "It's a small room. You see light coming from above. There's nothing much here.";
+            cropfield.Desc = "It's a cropfield with wheat.";
+
 
             Location[] allLocations = new Location[] { field, house, forest, village, seaside, meadow, windmill, hill, cave, lighthouse, cropfield };
 
@@ -151,10 +165,15 @@ namespace KATE_text_game
                 int index = FindLocInAllLocs(dest);
                 if (index != -1)
                 {
-                    Console.WriteLine("You go in " + allLocations[index].Desc + ".");
                     player.Loc = allLocations[index];
+                    PrintLocDesc();
                 }
                 return true;
+            }
+
+            void PrintLocDesc()
+            {
+                Console.WriteLine($"You are in {player.Loc.Name}. {player.Loc.Desc}");
             }
 
             string input = "placeholder";
@@ -209,13 +228,7 @@ namespace KATE_text_game
 
 
             Console.WriteLine("You wake up.");
-            Console.WriteLine("You are in " + player.Loc.Desc + ".");
-            Console.WriteLine("You can go to: ");
-            for (int i = 0; i < player.Loc.LocsAvbl.Length; i++)
-            {
-                Console.Write("- ");
-                Console.WriteLine(player.Loc.LocsAvbl[i]);
-            }
+            PrintLocDesc();
 
             while (GetInput() && ParseAndExecute(input)) ;
             Console.WriteLine("Bye!");

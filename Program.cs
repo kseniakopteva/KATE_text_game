@@ -59,6 +59,7 @@ namespace KATE_text_game
         public string Name { get => name; }
         public string Desc { get => desc; set => desc = value; }
         public string[] LocsAvbl { get => locsAvbl; set => locsAvbl = value; }
+        public string Tag { get => tag; }
 
     }
 
@@ -92,11 +93,10 @@ namespace KATE_text_game
             lighthouse.Desc = "It's a small room. You see light coming from above. There's nothing much here.";
             cropfield.Desc = "It's a cropfield with wheat.";
 
-
             Location[] allLocations = new Location[] { field, house, forest, village, seaside, meadow, windmill, hill, cave, lighthouse, cropfield };
 
-            Item hat = new Item("HAT", "an old straw hat", "field");
-            Item sword = new Item("SWORD", "a rusty sword", "house");
+            //Item hat = new Item("HAT", "an old straw hat", "field");
+            //Item sword = new Item("SWORD", "a rusty sword", "house");
 
             Player player = new Player(field);
 
@@ -106,14 +106,13 @@ namespace KATE_text_game
                 int index = 0;
 
                 // check whether the word is available
-
                 if (player.Loc.LocsAvbl.Contains(searchWord))
                 {
                     // find it in all locations
 
                     for (; index < allLocations.Length; index++)
                     {
-                        if (searchWord == allLocations[index].Name)
+                        if (searchWord == allLocations[index].Tag)
                         {
                             return index;
                         }
@@ -147,13 +146,13 @@ namespace KATE_text_game
             }
             bool ExecuteLook(string dest)
             {
-                if (dest == "around" || dest == player.Loc.Name)
-                    Console.WriteLine("You are in " + player.Loc.Desc + ".");
+                if (dest == "around" || dest == player.Loc.Tag)
+                    PrintLocDesc();
                 else
                 {
                     int index = FindLocInAllLocs(dest);
                     if (index != -1)
-                        Console.WriteLine("You see " + allLocations[index].Desc + ".");
+                        Console.WriteLine(allLocations[index].Desc);
                     else
                         Console.WriteLine("ERROR");
                 }
@@ -167,6 +166,10 @@ namespace KATE_text_game
                 {
                     player.Loc = allLocations[index];
                     PrintLocDesc();
+                }
+                else
+                {
+                    Console.WriteLine("ERROR");
                 }
                 return true;
             }

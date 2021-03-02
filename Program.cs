@@ -184,6 +184,11 @@ namespace KATE_text_game
                     case "east":
                         dest = player.Loc.East;
                         break;
+                    case "out":
+                    case "outside":
+                        if (player.Loc.Tag == "windmill" || player.Loc.Tag == "house" || player.Loc.Tag == "lighthouse" || player.Loc.Tag == "cave")
+                            dest = player.Loc.LocsAvbl[0];
+                        break;
                     default:
                         break;
                 }

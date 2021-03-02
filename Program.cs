@@ -209,7 +209,6 @@ namespace KATE_text_game
 
             void PrintAvblDir()
             {
-                Console.WriteLine("You can go to: ");
                 string dest;
                 for (int i = 0; i < player.Loc.LocsAvbl.Length; i++)
                 {
@@ -277,6 +276,7 @@ namespace KATE_text_game
                     if (inpTok.Length == 1)
                     {
                         Console.WriteLine($"Where should I {action}?");
+                        Console.WriteLine("You can go to: ");
                         PrintAvblDir();
                     }
                     else
@@ -298,6 +298,7 @@ namespace KATE_text_game
 
             Console.WriteLine("You wake up.");
             PrintLocDesc();
+            Console.WriteLine("There is: ");
             PrintAvblDir();
 
             while (GetInput() && ParseAndExecute(input)) ;

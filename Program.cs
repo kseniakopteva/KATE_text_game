@@ -49,17 +49,31 @@ namespace KATE_text_game
         string desc;
         string[] locsAvbl;
 
-        public Location(string tag, string name, string[] locsAvbl)
+        string north,
+            south,
+            west,
+            east;
+
+        public Location(string tag, string name, string[] locsAvbl, string north, string south, string west, string east)
         {
             this.tag = tag;
             this.name = name;
             this.locsAvbl = locsAvbl;
+
+            this.north = north;
+            this.south = south;
+            this.west = west;
+            this.east = east;
         }
 
         public string Name { get => name; }
         public string Desc { get => desc; set => desc = value; }
         public string[] LocsAvbl { get => locsAvbl; set => locsAvbl = value; }
         public string Tag { get => tag; }
+        public string North { get => north; }
+        public string South { get => south; }
+        public string West { get => west; }
+        public string East { get => east; }
 
     }
 
@@ -69,19 +83,19 @@ namespace KATE_text_game
         {
             // house, N - forest with lighthouse, E - forest with cave, S - hill with village, W - flowerfield with windmill
 
-            Location field = new Location("field", "a field", new string[] { "house", "forest", "hill", "meadow", "seaside" }),
-                     house = new Location("house", "a house", new string[] { "field" }),
-                     forest = new Location("forest", "a forest", new string[] { "field", "cave" }),
-                     village = new Location("village", "a village", new string[] { "cropfield", "hill" }),
-                     seaside = new Location("seaside", "a seaside", new string[] { "field", "lighthouse" }),
-                     meadow = new Location("meadow", "a meadow", new string[] { "windmill", "field" }),
-                     windmill = new Location("windmill", "a windmill", new string[] { "meadow" }),
-                     hill = new Location("hill", "a hill", new string[] { "village", "field", "cropfield" }),
-                     cave = new Location("cave", "a cave", new string[] { "forest" }),
-                     lighthouse = new Location("lighthouse", "a lighthouse", new string[] { "seaside" }),
-                     cropfield = new Location("cropfield", "a cropfield", new string[] { "hill", "village" });
+            Location field = new Location("field", "a field", new string[] { "house", "forest", "hill", "meadow", "seaside" }, "seaside", "hill", "meadow", "forest"),
+                     house = new Location("house", "a house", new string[] { "field" }, "", "", "", ""),
+                     forest = new Location("forest", "a forest", new string[] { "field", "cave" }, "forest", "forest", "field", "cave"),
+                     village = new Location("village", "a village", new string[] { "cropfield", "hill" }, "hill", "", "cropfield", ""),
+                     seaside = new Location("seaside", "a seaside", new string[] { "field", "lighthouse" }, "lighthouse", "field", "", ""),
+                     meadow = new Location("meadow", "a meadow", new string[] { "windmill", "field", "seaside" }, "seaside", "cropfield", "", "field"),
+                     windmill = new Location("windmill", "a windmill", new string[] { "meadow" }, "", "", "", ""),
+                     hill = new Location("hill", "a hill", new string[] { "village", "field", "cropfield", "forest" }, "field", "village", "cropfield", "forest"),
+                     cave = new Location("cave", "a cave", new string[] { "forest" }, "", "", "forest", ""),
+                     lighthouse = new Location("lighthouse", "a lighthouse", new string[] { "seaside" }, "", "", "", ""),
+                     cropfield = new Location("cropfield", "a cropfield", new string[] { "hill", "village", "meadow" }, "meadow", "", "", "village");
 
-            field.Desc = "It's a field with tall grass and yarrow. There is a small house nearby. There is a seaside north, a dense forest east, a grass hill south and a flower meadow west.";
+            field.Desc = "It's a field with tall grass and yarrow. There is a small house nearby.";
             house.Desc = "It's a small wooden house made out of thin wood planks. There are few lattice windows and a table with a note. There is a chest next to one of the walls.";
             forest.Desc = "It's a dense forest with barely any light. There is a cave in the raised ground.";
             village.Desc = "It's a small village with quite a few people.";
@@ -109,7 +123,6 @@ namespace KATE_text_game
                 if (player.Loc.LocsAvbl.Contains(searchWord))
                 {
                     // find it in all locations
-
                     for (; index < allLocations.Length; index++)
                     {
                         if (searchWord == allLocations[index].Tag)
@@ -118,10 +131,6 @@ namespace KATE_text_game
                         }
                     }
                 }
-
-                // somehow find it description
-                //allLocations[index].Desc;
-
                 return -1;
             }
 
@@ -161,15 +170,34 @@ namespace KATE_text_game
             }
             bool ExecuteGo(string dest)
             {
+                switch (dest)
+                {
+                    case "north":
+                        dest = player.Loc.North;
+                        break;
+                    case "south":
+                        dest = player.Loc.South;
+                        break;
+                    case "west":
+                        dest = player.Loc.West;
+                        break;
+                    case "east":
+                        dest = player.Loc.East;
+                        break;
+                    default:
+                        break;
+                }
+
                 int index = FindLocInAllLocs(dest);
                 if (index != -1)
                 {
                     player.Loc = allLocations[index];
+                    Console.Clear();
                     PrintLocDesc();
                 }
                 else
                 {
-                    Console.WriteLine("ERROR");
+                    Console.WriteLine("You can't go there.");
                 }
                 return true;
             }
@@ -177,6 +205,37 @@ namespace KATE_text_game
             void PrintLocDesc()
             {
                 Console.WriteLine($"You are in {player.Loc.Name}. {player.Loc.Desc}");
+            }
+
+            void PrintAvblDir()
+            {
+                Console.WriteLine("You can go to: ");
+                string dest;
+                for (int i = 0; i < player.Loc.LocsAvbl.Length; i++)
+                {
+                    bool isThereNoDir = true;
+
+                    if (player.Loc.North == player.Loc.LocsAvbl[i])
+                        dest = "North";
+                    else if (player.Loc.South == player.Loc.LocsAvbl[i])
+                        dest = "South";
+                    else if (player.Loc.West == player.Loc.LocsAvbl[i])
+                        dest = "West";
+                    else if (player.Loc.East == player.Loc.LocsAvbl[i])
+                        dest = "East";
+                    else
+                    {
+                        dest = "";
+                        isThereNoDir = false;
+                        //dest = player.Loc.Tag;
+                    }
+
+                    int index = FindLocInAllLocs(player.Loc.LocsAvbl[i]);
+                    if (isThereNoDir)
+                        Console.WriteLine($" - {allLocations[index].Name} in the {dest}");
+                    else
+                        Console.WriteLine($" - {allLocations[index].Name}");
+                }
             }
 
             string input = "placeholder";
@@ -216,7 +275,10 @@ namespace KATE_text_game
                 else if (action == "go")
                 {
                     if (inpTok.Length == 1)
+                    {
                         Console.WriteLine($"Where should I {action}?");
+                        PrintAvblDir();
+                    }
                     else
                         ExecuteGo(dest);
                 }
@@ -236,6 +298,7 @@ namespace KATE_text_game
 
             Console.WriteLine("You wake up.");
             PrintLocDesc();
+            PrintAvblDir();
 
             while (GetInput() && ParseAndExecute(input)) ;
             Console.WriteLine("Bye!");

@@ -18,6 +18,19 @@ namespace KATE_text_game
             west,
             east;
 
+        public Location(string tag, string name, string[] locsAvbl, string north, string south, string west, string east, IList<Item> items)
+        {
+            this.tag = tag;
+            this.name = name;
+            this.locsAvbl = locsAvbl;
+
+            this.north = north;
+            this.south = south;
+            this.west = west;
+            this.east = east;
+            ItemList = new List<Item>(items);
+        }
+
         public Location(string tag, string name, string[] locsAvbl, string north, string south, string west, string east)
         {
             this.tag = tag;
@@ -29,6 +42,9 @@ namespace KATE_text_game
             this.west = west;
             this.east = east;
         }
+
+        public List<Item> ItemList;
+
 
         public string Name { get => name; }
         public string Desc { get => desc; set => desc = value; }

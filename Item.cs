@@ -10,13 +10,11 @@ namespace KATE_text_game
     {
         string name;
         string desc;
-        string loc;
 
-        public Item(string name, string desc, string loc)
+        public Item(string name, string desc)
         {
             this.name = name;
             this.desc = desc;
-            this.loc = loc;
         }
         public string Name
         {
@@ -28,5 +26,16 @@ namespace KATE_text_game
         {
             Console.WriteLine(desc);
         }
+
+        public override string ToString()
+        {
+            return name;
+        }
+
+        //public static explicit operator Item(string item)
+        //{
+        //    Item newItem = new Item(item, "", "");
+        //    return newItem;
+        //}
     }
 }

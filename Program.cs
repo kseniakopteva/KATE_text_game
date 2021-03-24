@@ -14,13 +14,17 @@ namespace KATE_text_game
         {
             #region Initializing locations
 
-            // house, N - forest with lighthouse, E - forest with cave, S - hill with village, W - flowerfield with windmill
+            //Location field, house, forest, village, seaside, meadow, windmill, hill, cave, lighthouse, cropfield;
 
-            Location field = new Location("field", "a field", new string[] { "house", "forest", "hill", "meadow", "seaside" }, "seaside", "hill", "meadow", "forest"),
+            Item hat = new Item("HAT", "an old straw hat");
+            Item sword = new Item("SWORD", "a rusty sword");
+            Item sand = new Item("SAND", "a small handful of sand");
+
+            Location field = new Location("field", "a field", new string[] { "house", "forest", "hill", "meadow", "seaside" }, "seaside", "hill", "meadow", "forest") { ItemList = new List<Item> { hat, sword } },
                      house = new Location("house", "a house", new string[] { "field" }, "", "", "", ""),
                      forest = new Location("forest", "a forest", new string[] { "field", "cave" }, "forest", "forest", "field", "cave"),
                      village = new Location("village", "a village", new string[] { "cropfield", "hill" }, "hill", "", "cropfield", ""),
-                     seaside = new Location("seaside", "a seaside", new string[] { "field", "lighthouse" }, "lighthouse", "field", "", ""),
+                     seaside = new Location("seaside", "a seaside", new string[] { "field", "lighthouse" }, "lighthouse", "field", "", "") { ItemList = new List<Item> { sand } },
                      meadow = new Location("meadow", "a meadow", new string[] { "windmill", "field", "seaside" }, "seaside", "cropfield", "", "field"),
                      windmill = new Location("windmill", "a windmill", new string[] { "meadow" }, "", "", "", ""),
                      hill = new Location("hill", "a hill", new string[] { "village", "field", "cropfield", "forest" }, "field", "village", "cropfield", "forest"),
@@ -40,12 +44,13 @@ namespace KATE_text_game
             lighthouse.Desc = "It's a small room. You see light coming from above. There's nothing much here.";
             cropfield.Desc = "It's a cropfield with wheat.";
 
+
+
+
             Location[] allLocations = new Location[] { field, house, forest, village, seaside, meadow, windmill, hill, cave, lighthouse, cropfield };
+            List<Item> allItems = new List<Item> { hat, sword, sand };
 
             #endregion
-
-            Item hat = new Item("HAT", "an old straw hat", "field");
-            Item sword = new Item("SWORD", "a rusty sword", "house");
 
             Player player = new Player(field);
 
@@ -221,6 +226,29 @@ namespace KATE_text_game
                     }
                     else
                         ExecuteGo(dest);
+                }
+                else if (action == "get")
+                {
+                    int index = -1;
+                    foreach (Item item in allItems)
+                    {
+                        if (item.ToString() == dest.ToUpper())
+                        {
+                            index = allItems.IndexOf(item);
+                            break;
+                        }
+                    }
+                    if (index != -1 && player.Loc.ItemList.Contains(allItems[index]))
+                    {
+                        player.AddItem(allItems[index]);
+                        Console.WriteLine("You got a " + allItems[index].Name + "!");
+                    }
+                    else
+                        Console.WriteLine("Ya can't!");
+                }
+                else if (action == "check")
+                {
+                    player.PrintInventory();
                 }
                 else if (action == "quit")
                 {

@@ -15,5 +15,29 @@ namespace KATE_text_game
         public Player(Location loc) { this.loc = loc; }
         public Location Loc { get => loc; set => loc = value; }
 
+
+        List<Item> inventory = new List<Item>() { };
+
+        public bool AddItem(Item item)
+        {
+            if (loc.ItemList.Contains(item))
+            {
+                inventory.Add(item);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void PrintInventory()
+        {
+            Console.WriteLine("My inventory contains: ");
+            foreach (Item item in inventory)
+            {
+                Console.WriteLine("- " + item.Name);
+            }
+        }
     }
 }

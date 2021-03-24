@@ -8,80 +8,12 @@ using System.Threading.Tasks;
 
 namespace KATE_text_game
 {
-    class Player
-    {
-        string[] inventory;
-        Location loc;
-        int health = 10;
-
-        public Player(Location loc) { this.loc = loc; }
-        public Location Loc { get => loc; set => loc = value; }
-
-    }
-
-    class Item
-    {
-        string name;
-        string desc;
-        string loc;
-
-        public Item(string name, string desc, string loc)
-        {
-            this.name = name;
-            this.desc = desc;
-            this.loc = loc;
-        }
-        public string Name
-        {
-            get => name;
-        }
-        public string Desc { get => desc; }
-
-        void LookAt()
-        {
-            Console.WriteLine(desc);
-        }
-    }
-
-    class Location
-    {
-        string tag;
-        string name;
-        string desc;
-        string[] locsAvbl;
-
-        string north,
-            south,
-            west,
-            east;
-
-        public Location(string tag, string name, string[] locsAvbl, string north, string south, string west, string east)
-        {
-            this.tag = tag;
-            this.name = name;
-            this.locsAvbl = locsAvbl;
-
-            this.north = north;
-            this.south = south;
-            this.west = west;
-            this.east = east;
-        }
-
-        public string Name { get => name; }
-        public string Desc { get => desc; set => desc = value; }
-        public string[] LocsAvbl { get => locsAvbl; set => locsAvbl = value; }
-        public string Tag { get => tag; }
-        public string North { get => north; }
-        public string South { get => south; }
-        public string West { get => west; }
-        public string East { get => east; }
-
-    }
-
     class Program
     {
         static void Main(string[] args)
         {
+            #region Initializing locations
+
             // house, N - forest with lighthouse, E - forest with cave, S - hill with village, W - flowerfield with windmill
 
             Location field = new Location("field", "a field", new string[] { "house", "forest", "hill", "meadow", "seaside" }, "seaside", "hill", "meadow", "forest"),
@@ -109,6 +41,8 @@ namespace KATE_text_game
             cropfield.Desc = "It's a cropfield with wheat.";
 
             Location[] allLocations = new Location[] { field, house, forest, village, seaside, meadow, windmill, hill, cave, lighthouse, cropfield };
+
+            #endregion
 
             Item hat = new Item("HAT", "an old straw hat", "field");
             Item sword = new Item("SWORD", "a rusty sword", "house");

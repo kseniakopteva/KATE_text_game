@@ -29,6 +29,7 @@ namespace KATE_text_game
         {
             this.name = name;
             this.desc = desc;
+            this.loc = loc;
         }
         public string Name
         {
@@ -109,8 +110,8 @@ namespace KATE_text_game
 
             Location[] allLocations = new Location[] { field, house, forest, village, seaside, meadow, windmill, hill, cave, lighthouse, cropfield };
 
-            //Item hat = new Item("HAT", "an old straw hat", "field");
-            //Item sword = new Item("SWORD", "a rusty sword", "house");
+            Item hat = new Item("HAT", "an old straw hat", "field");
+            Item sword = new Item("SWORD", "a rusty sword", "house");
 
             Player player = new Player(field);
 

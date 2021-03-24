@@ -12,9 +12,9 @@ namespace KATE_text_game
     {
         static void Main(string[] args)
         {
-            Item hat = new Item("HAT", "an old straw hat");
-            Item sword = new Item("SWORD", "a rusty sword");
-            Item sand = new Item("SAND", "a small handful of sand");
+            Item hat = new Item("hat", "a hat", "an old straw hat");
+            Item sword = new Item("sword", "a sword", "a rusty sword");
+            Item sand = new Item("sand", "sand", "a small handful of sand");
 
             #region Initializing locations
 
@@ -294,7 +294,7 @@ namespace KATE_text_game
                 }
                 else if (action == "get")
                 {
-                    int index = player.Loc.itemList.FindIndex(item => item.Name == dest.ToUpper());
+                    int index = player.Loc.itemList.FindIndex(item => item.Tag == dest);
                     if (index >= 0)
                     {
                         // element exists, do what you need

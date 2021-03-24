@@ -8,13 +8,19 @@ namespace KATE_text_game
 {
     class Item
     {
+        string tag;
         string name;
         string desc;
 
-        public Item(string name, string desc)
+        public Item(string tag, string name, string desc)
         {
+            this.tag = tag;
             this.name = name;
             this.desc = desc;
+        }
+        public string Tag
+        {
+            get => tag;
         }
         public string Name
         {

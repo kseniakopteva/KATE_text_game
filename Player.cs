@@ -20,7 +20,7 @@ namespace KATE_text_game
 
         public bool AddItem(Item item)
         {
-            if (loc.ItemList.Contains(item))
+            if (loc.itemList.Contains(item))
             {
                 inventory.Add(item);
                 return true;

@@ -11,49 +11,20 @@ namespace KATE_text_game
         string tag;
         string name;
         string desc;
-        string[] locsAvbl;
 
-        string north,
-            south,
-            west,
-            east;
+        // TODO: change public to private
+        public List<Item> itemList;
+        public Dictionary<string, Location> directions;
+        public List<Location> availableLocations;
 
-        public Location(string tag, string name, string[] locsAvbl, string north, string south, string west, string east, IList<Item> items)
+        public Location(string tag, string name)
         {
             this.tag = tag;
             this.name = name;
-            this.locsAvbl = locsAvbl;
-
-            this.north = north;
-            this.south = south;
-            this.west = west;
-            this.east = east;
-            ItemList = new List<Item>(items);
         }
 
-        public Location(string tag, string name, string[] locsAvbl, string north, string south, string west, string east)
-        {
-            this.tag = tag;
-            this.name = name;
-            this.locsAvbl = locsAvbl;
-
-            this.north = north;
-            this.south = south;
-            this.west = west;
-            this.east = east;
-        }
-
-        public List<Item> ItemList;
-
-
+        public string Tag { get => tag; }
         public string Name { get => name; }
         public string Desc { get => desc; set => desc = value; }
-        public string[] LocsAvbl { get => locsAvbl; set => locsAvbl = value; }
-        public string Tag { get => tag; }
-        public string North { get => north; }
-        public string South { get => south; }
-        public string West { get => west; }
-        public string East { get => east; }
-
     }
 }

@@ -219,7 +219,8 @@ namespace KATE_text_game
 
             void PrintLocDesc()
             {
-                Console.WriteLine($"You are in {player.Loc.Name}. {player.Loc.Desc}");
+                Console.Write($"You are in {player.Loc.Name}. {player.Loc.Desc} ");
+                PrintAvblItems();
             }
 
             void PrintAvblDir()
@@ -232,6 +233,17 @@ namespace KATE_text_game
                     {
                         Console.WriteLine("Oops! Something went wrong");
                     }
+                }
+            }
+
+            void PrintAvblItems()
+            {
+                if (player.Loc.itemList != null)
+                {
+                    if (player.Loc.itemList.Count == 1)
+                        Console.WriteLine($"There is {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+                    else
+                        Console.WriteLine($"There are {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
                 }
             }
 

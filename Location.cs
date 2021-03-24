@@ -23,6 +23,11 @@ namespace KATE_text_game
             this.name = name;
         }
 
+        public void RemoveItem(Item item)
+        {
+
+        }
+
         public string Tag { get => tag; }
         public string Name { get => name; }
         public string Desc { get => desc; set => desc = value; }

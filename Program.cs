@@ -12,9 +12,9 @@ namespace KATE_text_game
     {
         static void Main(string[] args)
         {
-            Item hat = new Item("hat", "a hat", "an old straw hat");
-            Item sword = new Item("sword", "a sword", "a rusty sword");
-            Item sand = new Item("sand", "sand", "a small handful of sand");
+            Item hat = new Item("hat", "A HAT", "an old straw hat");
+            Item sword = new Item("sword", "A SWORD", "a rusty sword");
+            Item sand = new Item("sand", "SAND", "a small handful of sand");
 
             #region Initializing locations
 
@@ -219,19 +219,23 @@ namespace KATE_text_game
 
             void PrintLocDesc()
             {
-                Console.Write($"You are in {player.Loc.Name}. {player.Loc.Desc} ");
+                if (player.Loc == seaside || player.Loc == field || player.Loc == cropfield || player.Loc == meadow || player.Loc == hill)
+                    Console.Write($"You are on {player.Loc.Name}. {player.Loc.Desc} ");
+                else
+                    Console.Write($"You are in {player.Loc.Name}. {player.Loc.Desc} ");
                 PrintAvblItems();
             }
 
             void PrintAvblDir()
             {
+                Console.WriteLine("You can go to: ");
                 foreach (KeyValuePair<string, Location> loc in player.Loc.directions)
                 {
                     if (loc.Value != null)
-                        Console.WriteLine($" - {loc.Value.Name} in the {loc.Key}");
+                        Console.WriteLine($" - {loc.Value.Name} on the {loc.Key}");
                     else
                     {
-                        Console.WriteLine("Oops! Something went wrong");
+                        Console.WriteLine("ERROR");
                     }
                 }
             }
@@ -240,6 +244,7 @@ namespace KATE_text_game
             {
                 if (player.Loc.itemList != null)
                 {
+                    // TODO: "There are ..., ..., ... AND ... on the ground."
                     if (player.Loc.itemList.Count == 1)
                         Console.WriteLine($"There is {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
                     else
@@ -269,6 +274,7 @@ namespace KATE_text_game
                 }
 
                 string dest = "";
+
                 if (inpTok.Length == 2)
                 {
                     dest = inpTok[1];
@@ -286,13 +292,12 @@ namespace KATE_text_game
                     if (inpTok.Length == 1)
                     {
                         Console.WriteLine($"Where should I {action}?");
-                        Console.WriteLine("You can go to: ");
                         PrintAvblDir();
                     }
                     else
                         ExecuteGo(dest);
                 }
-                else if (action == "get")
+                else if (action == "get" || action == "take")
                 {
                     int index = player.Loc.itemList.FindIndex(item => item.Tag == dest);
                     if (index >= 0)
@@ -305,7 +310,7 @@ namespace KATE_text_game
                         Console.WriteLine("You can't!");
 
                 }
-                else if (action == "check")
+                else if (action == "inventory")
                 {
                     player.PrintInventory();
                 }
@@ -325,7 +330,6 @@ namespace KATE_text_game
 
             Console.WriteLine("You wake up.");
             PrintLocDesc();
-            Console.WriteLine("There is: ");
             PrintAvblDir();
 
             while (GetInput() && ParseAndExecute(input)) ;

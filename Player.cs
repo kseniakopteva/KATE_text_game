@@ -17,16 +17,15 @@ namespace KATE_text_game
         public Player(Location loc) { this.loc = loc; }
         public Location Loc { get => loc; set => loc = value; }
 
-        public bool AddItem(Item item)
+        public void AddItem(Item item)
         {
-            if (loc.itemList.Contains(item))
-            {
-                inventory.Add(item);
-                loc.RemoveItem(item);
-                return true;
-            }
-            else
-                return false;
+            inventory.Add(item);
+            loc.itemList.Remove(item);
+        }
+        public void RemoveItem(Item item)
+        {
+            inventory.Remove(item);
+            loc.itemList.Add(item);
         }
 
         public void PrintInventory()

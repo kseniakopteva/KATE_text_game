@@ -19,16 +19,16 @@ namespace KATE_text_game
             #region Initializing locations
 
             Location field = new Location("field", "a field") { itemList = new List<Item>() { hat, sword } },
-                     house = new Location("house", "a house"),
-                     forest = new Location("forest", "a forest"),
-                     village = new Location("village", "a village"),
+                     house = new Location("house", "a house") { itemList = new List<Item> { } },
+                     forest = new Location("forest", "a forest") { itemList = new List<Item> { } },
+                     village = new Location("village", "a village") { itemList = new List<Item> { } },
                      seaside = new Location("seaside", "a seaside") { itemList = new List<Item> { sand } },
-                     meadow = new Location("meadow", "a meadow"),
-                     windmill = new Location("windmill", "a windmill"),
-                     hill = new Location("hill", "a hill"),
-                     cave = new Location("cave", "a cave"),
-                     lighthouse = new Location("lighthouse", "a lighthouse"),
-                     cropfield = new Location("cropfield", "a cropfield");
+                     meadow = new Location("meadow", "a meadow") { itemList = new List<Item> { } },
+                     windmill = new Location("windmill", "a windmill") { itemList = new List<Item> { } },
+                     hill = new Location("hill", "a hill") { itemList = new List<Item> { } },
+                     cave = new Location("cave", "a cave") { itemList = new List<Item> { } },
+                     lighthouse = new Location("lighthouse", "a lighthouse") { itemList = new List<Item> { } },
+                     cropfield = new Location("cropfield", "a cropfield") { itemList = new List<Item> { } };
 
             #region descriptions, avalaible locations and directions
 
@@ -311,8 +311,21 @@ namespace KATE_text_game
                         player.AddItem(player.Loc.itemList[index]);
                     }
                     else
-                        Console.WriteLine("You can't!");
+                        Console.WriteLine("You can't " + action + " this!");
 
+                }
+                else if (action == "drop")
+                {
+                    int index = player.inventory.FindIndex(item => item.Tag == dest);
+                    if (index >= 0)
+                    {
+                        Console.WriteLine("You dropped " + player.inventory[index].Name + "!");
+                        player.RemoveItem(player.inventory[index]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("You can't drop it!");
+                    }
                 }
                 else if (action == "inventory")
                 {

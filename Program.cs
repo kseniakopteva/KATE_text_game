@@ -227,7 +227,7 @@ namespace KATE_text_game
                 if (player.Loc.itemList == null || player.Loc.itemList.Count == 0)
                     Console.Write("\n");
 
-                PrintAvblItems();
+                PrintAvailableItems();
             }
 
             // prints text; both typing and wrapping words (easier to write)
@@ -284,7 +284,7 @@ namespace KATE_text_game
                 }
             }
 
-            void PrintAvblItems()
+            void PrintAvailableItems()
             {
                 if (player.Loc.itemList.Count != 0)
                 {

@@ -30,11 +30,16 @@ namespace KATE_text_game
 
         public void PrintInventory()
         {
-            Console.WriteLine("My inventory contains: ");
-            foreach (Item item in inventory)
+            if (inventory.Count != 0)
             {
-                Console.WriteLine("- " + item.Name);
+                Console.WriteLine("My inventory contains: ");
+                foreach (Item item in inventory)
+                {
+                    Console.WriteLine("- " + item.Name);
+                }
             }
+            else
+                Console.WriteLine("You don't have anything in your inventory.");
         }
     }
 }

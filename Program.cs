@@ -282,11 +282,11 @@ namespace KATE_text_game
 
                     if (player.Loc.directions.ContainsValue(loc))
                     {
-                        Console.WriteLine($"There is {loc.Name} on the {locationKey}");
+                        Console.WriteLine($"> {loc.Name} on the {locationKey}");
                     }
                     else
                     {
-                        Console.WriteLine("There is " + loc.Name + ".");
+                        Console.WriteLine("> " + loc.Name);
                     }
                 }
             }

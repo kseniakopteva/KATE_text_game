@@ -11,11 +11,11 @@ namespace KATE_text_game
         Location loc;
         int health = 10;
 
+        // TODO: make private
+        public List<Item> inventory = new List<Item>() { };
+
         public Player(Location loc) { this.loc = loc; }
         public Location Loc { get => loc; set => loc = value; }
-
-
-        List<Item> inventory = new List<Item>() { };
 
         public bool AddItem(Item item)
         {

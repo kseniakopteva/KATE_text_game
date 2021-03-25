@@ -220,9 +220,9 @@ namespace KATE_text_game
             void PrintLocDesc()
             {
                 if (player.Loc == seaside || player.Loc == field || player.Loc == cropfield || player.Loc == meadow || player.Loc == hill)
-                    Console.Write($"You are on {player.Loc.Name}. {player.Loc.Desc} ");
+                    Print($"You are on {player.Loc.Name}. {player.Loc.Desc}");
                 else
-                    Console.Write($"You are in {player.Loc.Name}. {player.Loc.Desc} ");
+                    Print($"You are in {player.Loc.Name}. {player.Loc.Desc}");
 
                 if (player.Loc.itemList == null || player.Loc.itemList.Count == 0)
                     Console.Write("\n");
@@ -231,18 +231,20 @@ namespace KATE_text_game
             }
 
             // prints text; both typing and wrapping words (easier to write)
-            void Print(string text) { WordWrap(text, 80); }
+            void PrintLine(string text) { WordWrap(text, 80, true); }
+            void Print(string text) { WordWrap(text, 80, false); }
+
             // types out the string letter by letter
             void TypeOut(string text)
             {
                 foreach (char letter in text)
                 {
                     Console.Write(letter);
-                    Thread.Sleep(500);
+                    Thread.Sleep(50);
                 }
             }
             // wraps the string
-            void WordWrap(string inputString, int limit)
+            void WordWrap(string inputString, int limit, bool isNewLineNecessary)
             {
                 limit = 80;
                 string[] words = inputString.Split(' ');
@@ -261,14 +263,19 @@ namespace KATE_text_game
                 }
 
                 if (line.Length > 0)
-                    newSentence.AppendLine(line);
+                {
+                    if (isNewLineNecessary)
+                        newSentence.AppendLine(line);
+                    else
+                        newSentence.Append(line);
+                }
 
                 TypeOut(newSentence.ToString());
             }
 
             void PrintAvailableLocations()
             {
-                Console.WriteLine("You can go to: ");
+                PrintLine("You can go to: ");
                 foreach (Location loc in player.Loc.availableLocations)
                 {
                     string locationKey = player.Loc.directions.FirstOrDefault(location => location.Value == loc).Key;
@@ -290,9 +297,9 @@ namespace KATE_text_game
                 {
                     // TODO: "There are ..., ..., ... AND ... on the ground."
                     if (player.Loc.itemList.Count == 1)
-                        Console.WriteLine($"There is {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+                        PrintLine($"There is {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
                     else
-                        Console.WriteLine($"There are {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+                        PrintLine($"There are {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
                 }
             }
 

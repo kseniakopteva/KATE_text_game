@@ -25,7 +25,7 @@ namespace KATE_text_game
 
         public void RemoveItem(Item item)
         {
-
+            itemList.Remove(item);
         }
 
         public string Tag { get => tag; }

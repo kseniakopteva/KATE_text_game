@@ -223,6 +223,10 @@ namespace KATE_text_game
                     Console.Write($"You are on {player.Loc.Name}. {player.Loc.Desc} ");
                 else
                     Console.Write($"You are in {player.Loc.Name}. {player.Loc.Desc} ");
+
+                if (player.Loc.itemList == null || player.Loc.itemList.Count == 0)
+                    Console.Write("\n");
+
                 PrintAvblItems();
             }
 
@@ -242,7 +246,7 @@ namespace KATE_text_game
 
             void PrintAvblItems()
             {
-                if (player.Loc.itemList != null)
+                if (player.Loc.itemList != null && player.Loc.itemList.Count != 0)
                 {
                     // TODO: "There are ..., ..., ... AND ... on the ground."
                     if (player.Loc.itemList.Count == 1)
@@ -303,8 +307,8 @@ namespace KATE_text_game
                     if (index >= 0)
                     {
                         // element exists, do what you need
-                        player.AddItem(player.Loc.itemList[index]);
                         Console.WriteLine("You got a " + player.Loc.itemList[index].Name + "!");
+                        player.AddItem(player.Loc.itemList[index]);
                     }
                     else
                         Console.WriteLine("You can't!");

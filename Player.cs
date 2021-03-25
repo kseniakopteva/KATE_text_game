@@ -23,6 +23,7 @@ namespace KATE_text_game
             if (loc.itemList.Contains(item))
             {
                 inventory.Add(item);
+                loc.RemoveItem(item);
                 return true;
             }
             else

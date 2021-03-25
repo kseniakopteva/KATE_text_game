@@ -237,16 +237,12 @@ namespace KATE_text_game
                 {
                     if (loc.Value != null)
                         Console.WriteLine($" - {loc.Value.Name} on the {loc.Key}");
-                    else
-                    {
-                        Console.WriteLine("ERROR");
-                    }
                 }
             }
 
             void PrintAvblItems()
             {
-                if (player.Loc.itemList != null && player.Loc.itemList.Count != 0)
+                if (player.Loc.itemList.Count != 0)
                 {
                     // TODO: "There are ..., ..., ... AND ... on the ground."
                     if (player.Loc.itemList.Count == 1)

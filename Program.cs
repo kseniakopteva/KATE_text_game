@@ -230,7 +230,43 @@ namespace KATE_text_game
                 PrintAvblItems();
             }
 
-            void PrintAvblDir()
+            // prints text; both typing and wrapping words (easier to write)
+            void Print(string text) { WordWrap(text, 80); }
+            // types out the string letter by letter
+            void TypeOut(string text)
+            {
+                foreach (char letter in text)
+                {
+                    Console.Write(letter);
+                    Thread.Sleep(500);
+                }
+            }
+            // wraps the string
+            void WordWrap(string inputString, int limit)
+            {
+                limit = 80;
+                string[] words = inputString.Split(' ');
+
+                StringBuilder newSentence = new StringBuilder();
+
+                string line = "";
+                foreach (string word in words)
+                {
+                    if ((line + word).Length > limit)
+                    {
+                        newSentence.AppendLine(line);
+                        line = "";
+                    }
+                    line += string.Format("{0} ", word);
+                }
+
+                if (line.Length > 0)
+                    newSentence.AppendLine(line);
+
+                TypeOut(newSentence.ToString());
+            }
+
+            void PrintAvailableLocations()
             {
                 Console.WriteLine("You can go to: ");
                 foreach (Location loc in player.Loc.availableLocations)
@@ -300,7 +336,7 @@ namespace KATE_text_game
                     if (inpTok.Length == 1)
                     {
                         Console.WriteLine($"Where should I {action}?");
-                        PrintAvblDir();
+                        PrintAvailableLocations();
                     }
                     else
                         ExecuteGo(dest);
@@ -368,10 +404,9 @@ namespace KATE_text_game
                 return true;
             }
 
-
             Console.WriteLine("You wake up.");
             PrintLocDesc();
-            PrintAvblDir();
+            PrintAvailableLocations();
 
             while (GetInput() && ParseAndExecute(input)) ;
             Console.WriteLine("Bye!");

@@ -273,6 +273,42 @@ namespace KATE_text_game
                 TypeOut(newSentence.ToString());
             }
 
+            void WordWrapInABox(string inputString)
+            {
+                int limit = 36;
+                string[] words = inputString.Split(' ');
+
+                StringBuilder newSentence = new StringBuilder();
+
+                // TODO: get rid of magical numbers
+
+                Console.WriteLine(new string('/', 40));
+                Console.WriteLine('/' + new string(' ', 38) + '/');
+
+                string line = "/  ";
+                foreach (string word in words)
+                {
+                    if ((line + word).Length > limit)
+                    {
+                        newSentence.AppendLine(line + new string(' ', 37 - line.Length) + "  /");
+                        line = "/  ";
+                    }
+                    line += string.Format("{0} ", word);
+                }
+
+                if (line.Length > 0)
+                {
+                    newSentence.Append(line + new string(' ', 37 - line.Length) + "  /");
+                }
+
+                Console.WriteLine(newSentence.ToString());
+
+                Console.WriteLine('/' + new string(' ', 38) + '/');
+                Console.WriteLine(new string('/', 40));
+                Console.WriteLine();
+            }
+
+
             void PrintAvailableLocations()
             {
                 PrintLine("You can go to: ");
@@ -410,6 +446,14 @@ namespace KATE_text_game
 
                 return true;
             }
+
+
+            //WordWrapInABox("Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+            //    "Vivamus bibendum justo at quam bibendum.");
+
+            WordWrapInABox("a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a ");
+
+            WordWrapInABox("Lorem ipsum.");
 
             PrintLine("You wake up.");
             PrintLocationDescription();

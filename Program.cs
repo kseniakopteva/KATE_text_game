@@ -303,7 +303,7 @@ namespace KATE_text_game
                     if (index >= 0)
                     {
                         // element exists, do what you need
-                        Console.WriteLine("You got a " + player.Loc.itemList[index].Name + "!");
+                        Console.WriteLine("You got a " + player.Loc.itemList[index].Name + "! It is " + player.Loc.itemList[index].Desc + ".");
                         player.AddItem(player.Loc.itemList[index]);
                     }
                     else
@@ -321,6 +321,26 @@ namespace KATE_text_game
                     else
                     {
                         Console.WriteLine("You can't drop it!");
+                    }
+                }
+                else if (action == "examine")
+                {
+                    string itemDesc;
+
+                    int index = player.inventory.FindIndex(item => item.Tag == dest);
+                    if (index < 0)
+                    {
+                        index = player.Loc.itemList.FindIndex(item => item.Tag == dest);
+                        itemDesc = player.Loc.itemList[index].Desc;
+                    }
+                    else
+                    {
+                        itemDesc = player.inventory[index].Desc;
+                    }
+
+                    if (index >= 0)
+                    {
+                        Console.WriteLine(char.ToUpper(itemDesc[0]) + itemDesc.Substring(1) + ".");
                     }
                 }
                 else if (action == "inventory")

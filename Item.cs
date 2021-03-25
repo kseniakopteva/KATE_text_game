@@ -27,21 +27,5 @@ namespace KATE_text_game
             get => name;
         }
         public string Desc { get => desc; }
-
-        void LookAt()
-        {
-            Console.WriteLine(desc);
-        }
-
-        public override string ToString()
-        {
-            return name;
-        }
-
-        //public static explicit operator Item(string item)
-        //{
-        //    Item newItem = new Item(item, "", "");
-        //    return newItem;
-        //}
     }
 }

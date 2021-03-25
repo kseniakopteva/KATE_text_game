@@ -8,7 +8,6 @@ namespace KATE_text_game
 {
     class Player
     {
-        //string[] inventory;
         Location loc;
         int health = 10;
 
@@ -27,9 +26,7 @@ namespace KATE_text_game
                 return true;
             }
             else
-            {
                 return false;
-            }
         }
 
         public void PrintInventory()

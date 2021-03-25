@@ -233,10 +233,18 @@ namespace KATE_text_game
             void PrintAvblDir()
             {
                 Console.WriteLine("You can go to: ");
-                foreach (KeyValuePair<string, Location> loc in player.Loc.directions)
+                foreach (Location loc in player.Loc.availableLocations)
                 {
-                    if (loc.Value != null)
-                        Console.WriteLine($" - {loc.Value.Name} on the {loc.Key}");
+                    string locationKey = player.Loc.directions.FirstOrDefault(location => location.Value == loc).Key;
+
+                    if (player.Loc.directions.ContainsValue(loc))
+                    {
+                        Console.WriteLine($"There is {loc.Name} on the {locationKey}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("There is " + loc.Name + ".");
+                    }
                 }
             }
 

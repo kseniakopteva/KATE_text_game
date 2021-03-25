@@ -162,7 +162,7 @@ namespace KATE_text_game
             bool ExecuteLook(string dest)
             {
                 if (dest == "around" || dest == player.Loc.Tag)
-                    PrintLocDesc();
+                    PrintLocationDescription();
                 else
                 {
                     int index = player.Loc.availableLocations.FindIndex(item => item.Tag == dest);
@@ -208,7 +208,7 @@ namespace KATE_text_game
                     // element exists, do what you need
                     player.Loc = player.Loc.availableLocations[index];
                     Console.Clear();
-                    PrintLocDesc();
+                    PrintLocationDescription();
                 }
                 else
                 {
@@ -217,7 +217,7 @@ namespace KATE_text_game
                 return true;
             }
 
-            void PrintLocDesc()
+            void PrintLocationDescription()
             {
                 if (player.Loc == seaside || player.Loc == field || player.Loc == cropfield || player.Loc == meadow || player.Loc == hill)
                     Print($"You are on {player.Loc.Name}. {player.Loc.Desc}");
@@ -412,7 +412,7 @@ namespace KATE_text_game
             }
 
             Console.WriteLine("You wake up.");
-            PrintLocDesc();
+            PrintLocationDescription();
             PrintAvailableLocations();
 
             while (GetInput() && ParseAndExecute(input)) ;

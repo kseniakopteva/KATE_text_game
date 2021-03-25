@@ -411,7 +411,7 @@ namespace KATE_text_game
                 return true;
             }
 
-            Console.WriteLine("You wake up.");
+            PrintLine("You wake up.");
             PrintLocationDescription();
             PrintAvailableLocations();
 

@@ -301,41 +301,67 @@ namespace KATE_text_game
                 TypeOut(newSentence.ToString());
             }
 
-            void WordWrapInABox(string inputString)
+            void WordWrapInABox(string inputString, int boxWidth, char borderChar, int paddingWidth, string alignment)
             {
-                int limit = 36;
+                //int boxWidth = 40;
+                //char borderChar = '/';
+                //int paddingWidth = 2;
+
+                int leftMarginWidth;
+
+                switch (alignment)
+                {
+                    case "center":
+                        leftMarginWidth = (Console.WindowWidth - boxWidth) / 2;
+                        break;
+                    case "right":
+                        leftMarginWidth = Console.WindowWidth - boxWidth - 1;
+                        break;
+                    case "left":
+                    default:
+                        leftMarginWidth = 1;
+                        break;
+                }
+
+                int borderCharWidth = 1;
+                int boxWidthWithoutMargins = boxWidth - 2 * borderCharWidth;
+                int boxWitdthWithoutOneMargin = boxWidth - paddingWidth - borderCharWidth;
+
+                int limit = boxWidth - 2 * paddingWidth - 10;
                 string[] words = inputString.Split(' ');
 
                 StringBuilder newSentence = new StringBuilder();
 
-                // TODO: get rid of magical numbers
-
-                Console.WriteLine(new string('/', 40));
-                Console.WriteLine('/' + new string(' ', 38) + '/');
-
-                string line = "/  ";
-                foreach (string word in words)
+                Console.WriteLine(new string(' ', leftMarginWidth) + new string(borderChar, boxWidth));
+                for (int i = 0; i < paddingWidth - 1; i++)
                 {
-                    if ((line + word).Length > limit)
+                    Console.WriteLine(new string(' ', leftMarginWidth) + borderChar + new string(' ', boxWidthWithoutMargins) + borderChar);
+
+                    string line = "";
+
+                    foreach (string word in words)
                     {
-                        newSentence.AppendLine(line + new string(' ', 37 - line.Length) + "  /");
-                        line = "/  ";
+                        if ((line + word).Length > limit)
+                        {
+                            newSentence.AppendLine(new string(' ', leftMarginWidth) + borderChar + new string(' ', paddingWidth) + line + new string(' ', boxWidthWithoutMargins - borderCharWidth - borderCharWidth - line.Length) + borderChar);
+                            line = "";
+                        }
+                        line += string.Format("{0} ", word);
                     }
-                    line += string.Format("{0} ", word);
+
+                    if (line.Length > 0)
+                    {
+                        newSentence.AppendLine(new string(' ', leftMarginWidth) + borderChar + new string(' ', paddingWidth) + line + new string(' ', boxWidthWithoutMargins - borderCharWidth - borderCharWidth - line.Length) + borderChar);
+                    }
                 }
 
-                if (line.Length > 0)
-                {
-                    newSentence.Append(line + new string(' ', 37 - line.Length) + "  /");
-                }
+                for (int j = 0; j < paddingWidth - 1; j++)
+                    newSentence.AppendLine(new string(' ', leftMarginWidth) + borderChar + new string(' ', boxWidthWithoutMargins) + borderChar);
+                newSentence.AppendLine(new string(' ', leftMarginWidth) + new string(borderChar, boxWidth));
 
                 Console.WriteLine(newSentence.ToString());
 
-                Console.WriteLine('/' + new string(' ', 38) + '/');
-                Console.WriteLine(new string('/', 40));
-                Console.WriteLine();
             }
-
 
             string GetAvailableLocations()
             {
@@ -484,13 +510,7 @@ namespace KATE_text_game
                 return true;
             }
 
-
-            //WordWrapInABox("Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-            //    "Vivamus bibendum justo at quam bibendum.");
-
-            WordWrapInABox("a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a ");
-
-            WordWrapInABox("Lorem ipsum.");
+            WordWrapInABox("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 40, 'X', 2, "center");
 
             PrintLine("You wake up.");
             Print(GetLocationDescription());

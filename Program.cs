@@ -159,7 +159,7 @@ namespace KATE_text_game
                 Console.Write("-->");
                 if (Confirm(ConsoleKey.Y))
                 {
-                    Console.Write("\n");
+                    Console.WriteLine();
                     return true;
                 }
                 return false;
@@ -168,7 +168,7 @@ namespace KATE_text_game
             bool ExecuteLook(string dest)
             {
                 if (dest == "around" || dest == player.Loc.Tag)
-                    PrintLocationDescription();
+                    Print(GetLocationDescription());
                 else
                 {
                     int index = player.Loc.availableLocations.FindIndex(item => item.Tag == dest);
@@ -214,7 +214,7 @@ namespace KATE_text_game
                     // element exists, do what you need
                     player.Loc = player.Loc.availableLocations[index];
                     Console.Clear();
-                    PrintLocationDescription();
+                    Print(GetLocationDescription());
                 }
                 else
                 {
@@ -223,17 +223,23 @@ namespace KATE_text_game
                 return true;
             }
 
-            void PrintLocationDescription()
+            string GetLocationDescription()
             {
+                StringBuilder desc = new StringBuilder("");
+
                 if (player.Loc == seaside || player.Loc == field || player.Loc == cropfield || player.Loc == meadow || player.Loc == hill)
-                    Print($"You are on {player.Loc.Name}. {player.Loc.Desc}");
+                    desc.Append($"You are on {player.Loc.Name}. {player.Loc.Desc}");
                 else
-                    Print($"You are in {player.Loc.Name}. {player.Loc.Desc}");
+                    desc.Append($"You are in {player.Loc.Name}. {player.Loc.Desc}");
 
-                if (player.Loc.itemList == null || player.Loc.itemList.Count == 0)
-                    Console.Write("\n");
+                if (player.Loc.itemList.Count != 0)
+                {
+                    desc.Append(" " + GetAvailableItems());
+                }
 
-                PrintAvailableItems();
+                desc.AppendLine();
+
+                return desc.ToString();
             }
 
             // prints text; both typing and wrapping words (easier to write)
@@ -278,7 +284,10 @@ namespace KATE_text_game
                         newSentence.AppendLine(line);
                         line = "";
                     }
-                    line += string.Format("{0} ", word);
+                    if (word.Contains("\n"))
+                        line += string.Format("{0}", word);
+                    else
+                        line += string.Format("{0} ", word);
                 }
 
                 if (line.Length > 0)
@@ -328,34 +337,43 @@ namespace KATE_text_game
             }
 
 
-            void PrintAvailableLocations()
+            string GetAvailableLocations()
             {
-                PrintLine("You can go to: ");
+                StringBuilder locs = new StringBuilder();
+
+                locs.AppendLine("You can go to: ");
                 foreach (Location loc in player.Loc.availableLocations)
                 {
                     string locationKey = player.Loc.directions.FirstOrDefault(location => location.Value == loc).Key;
 
                     if (player.Loc.directions.ContainsValue(loc))
                     {
-                        Console.WriteLine($"> {loc.Name} on the {locationKey}");
+                        locs.AppendLine($"> {loc.Name} on the {locationKey}");
                     }
                     else
                     {
-                        Console.WriteLine("> " + loc.Name);
+                        locs.AppendLine("> " + loc.Name);
                     }
                 }
+                return locs.ToString();
             }
 
-            void PrintAvailableItems()
+            string GetAvailableItems()
             {
                 if (player.Loc.itemList.Count != 0)
                 {
                     // TODO: "There are ..., ..., ... AND ... on the ground."
+
+                    StringBuilder items = new StringBuilder("");
+
                     if (player.Loc.itemList.Count == 1)
-                        PrintLine($"There is {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+                        items.Append($"There is {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
                     else
-                        PrintLine($"There are {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+                        items.Append($"There are {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+
+                    return items.ToString();
                 }
+                return null;
             }
 
             string input = "placeholder";
@@ -398,7 +416,7 @@ namespace KATE_text_game
                     if (inpTok.Length == 1)
                     {
                         Console.WriteLine($"Where should I {action}?");
-                        PrintAvailableLocations();
+                        Console.Write(GetAvailableLocations());
                     }
                     else
                         ExecuteGo(dest);
@@ -451,7 +469,7 @@ namespace KATE_text_game
                 }
                 else if (action == "inventory")
                 {
-                    player.PrintInventory();
+                    Console.Write(player.GetInventory());
                 }
                 else if (action == "quit")
                 {
@@ -475,8 +493,8 @@ namespace KATE_text_game
             WordWrapInABox("Lorem ipsum.");
 
             PrintLine("You wake up.");
-            PrintLocationDescription();
-            PrintAvailableLocations();
+            Print(GetLocationDescription());
+            Console.Write(GetAvailableLocations());
 
             while (GetInput() && ParseAndExecute(input)) ;
             Console.WriteLine("Bye!");

@@ -28,18 +28,22 @@ namespace KATE_text_game
             loc.itemList.Add(item);
         }
 
-        public void PrintInventory()
+        public string GetInventory()
         {
+            StringBuilder str = new StringBuilder();
+
             if (inventory.Count != 0)
             {
-                Console.WriteLine("My inventory contains: ");
+                str.AppendLine("My inventory contains: ");
                 foreach (Item item in inventory)
                 {
-                    Console.WriteLine("- " + item.Name);
+                    str.AppendLine("- " + item.Name);
                 }
             }
             else
-                Console.WriteLine("You don't have anything in your inventory.");
+                str.AppendLine("You don't have anything in your inventory.");
+
+            return str.ToString();
         }
     }
 }

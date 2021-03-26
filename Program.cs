@@ -139,6 +139,8 @@ namespace KATE_text_game
 
             Player player = new Player(field);
 
+            #region methods
+
             bool Confirm(ConsoleKey key)
             {
                 // Prevent from ending if CTL+C is pressed.
@@ -164,7 +166,6 @@ namespace KATE_text_game
                 }
                 return false;
             }
-            // TODO: "look north"
             bool ExecuteLook(string dest)
             {
                 if (dest == "around" || dest == player.Loc.Tag)
@@ -241,6 +242,45 @@ namespace KATE_text_game
 
                 return desc.ToString();
             }
+            string GetAvailableLocations()
+            {
+                StringBuilder locs = new StringBuilder();
+
+                locs.AppendLine("You can go to: ");
+                foreach (Location loc in player.Loc.availableLocations)
+                {
+                    string locationKey = player.Loc.directions.FirstOrDefault(location => location.Value == loc).Key;
+
+                    if (player.Loc.directions.ContainsValue(loc))
+                    {
+                        locs.AppendLine($"> {loc.Name} on the {locationKey}");
+                    }
+                    else
+                    {
+                        locs.AppendLine("> " + loc.Name);
+                    }
+                }
+                return locs.ToString();
+            }
+            string GetAvailableItems()
+            {
+                if (player.Loc.itemList.Count != 0)
+                {
+                    // TODO: "There are ..., ..., ... AND ... on the ground."
+
+                    StringBuilder items = new StringBuilder("");
+
+                    if (player.Loc.itemList.Count == 1)
+                        items.Append($"There is {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+                    else
+                        items.Append($"There are {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+
+                    return items.ToString();
+                }
+                return null;
+            }
+
+            #region output methods
 
             // prints text; both typing and wrapping words (easier to write)
             void PrintLine(string text) { WordWrap(text, 80, true); }
@@ -363,44 +403,7 @@ namespace KATE_text_game
 
             }
 
-            string GetAvailableLocations()
-            {
-                StringBuilder locs = new StringBuilder();
-
-                locs.AppendLine("You can go to: ");
-                foreach (Location loc in player.Loc.availableLocations)
-                {
-                    string locationKey = player.Loc.directions.FirstOrDefault(location => location.Value == loc).Key;
-
-                    if (player.Loc.directions.ContainsValue(loc))
-                    {
-                        locs.AppendLine($"> {loc.Name} on the {locationKey}");
-                    }
-                    else
-                    {
-                        locs.AppendLine("> " + loc.Name);
-                    }
-                }
-                return locs.ToString();
-            }
-
-            string GetAvailableItems()
-            {
-                if (player.Loc.itemList.Count != 0)
-                {
-                    // TODO: "There are ..., ..., ... AND ... on the ground."
-
-                    StringBuilder items = new StringBuilder("");
-
-                    if (player.Loc.itemList.Count == 1)
-                        items.Append($"There is {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
-                    else
-                        items.Append($"There are {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
-
-                    return items.ToString();
-                }
-                return null;
-            }
+            #endregion
 
             string input = "placeholder";
             bool GetInput()
@@ -411,7 +414,6 @@ namespace KATE_text_game
                     return true;
                 else return false;
             }
-
             bool ParseAndExecute(string Input)
             {
                 string[] inpTok = Input.Split(' ');
@@ -509,6 +511,8 @@ namespace KATE_text_game
 
                 return true;
             }
+
+            #endregion
 
             WordWrapInABox("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 40, 'X', 2, "center");
 

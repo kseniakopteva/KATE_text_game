@@ -239,8 +239,21 @@ namespace KATE_text_game
             {
                 foreach (char letter in text)
                 {
+                    int time; // = 50
+                    Random rnd = new Random();
+
+                    if (new[] { '.', ';', '?', '!', ':' }.Contains(letter))
+                        time = 400;
+                    else if (',' == letter)
+                        time = rnd.Next(50, 100);
+                    else if (' ' == letter)
+                        time = rnd.Next(30, 40);
+                    else if (Char.IsLetter(letter) || Char.IsNumber(letter))
+                        time = rnd.Next(50, 80);
+                    else time = 0;
+
                     Console.Write(letter);
-                    Thread.Sleep(50);
+                    Thread.Sleep(time);
                 }
             }
             // wraps the string

@@ -139,19 +139,25 @@ namespace KATE_text_game
 
             Player player = new Player(field);
 
+            bool Confirm(ConsoleKey key)
+            {
+                // Prevent from ending if CTL+C is pressed.
+                //Console.TreatControlCAsInput = true;
+
+                ConsoleKeyInfo keyPressed = Console.ReadKey();
+
+                if (keyPressed.Key == key)
+                {
+                    return true;
+                }
+                return false;
+            }
+
             bool ExecuteQuitGame()
             {
                 Console.WriteLine("Are you sure? Y/N");
-
-                ConsoleKeyInfo keyPressed;
-
-                // Prevent example from ending if CTL+C is pressed.
-                Console.TreatControlCAsInput = true;
-
                 Console.Write("-->");
-                keyPressed = Console.ReadKey();
-
-                if (keyPressed.Key == ConsoleKey.Y)
+                if (Confirm(ConsoleKey.Y))
                 {
                     Console.Write("\n");
                     return true;

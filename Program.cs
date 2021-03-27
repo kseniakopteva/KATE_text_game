@@ -339,6 +339,12 @@ namespace KATE_text_game
                         newSentence.AppendLine(line);
                         line = "";
                     }
+                    else if ((line + word).Length + 1 == limit)
+                    {
+                        line += string.Format("{0}", word);
+                        continue;
+                    }
+
                     if (word.Contains("\n"))
                         line += string.Format("{0}", word);
                     else

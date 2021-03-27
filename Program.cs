@@ -415,7 +415,7 @@ namespace KATE_text_game
                 int boxWidthWithoutMargins = boxWidth - 2 * borderCharWidth;
                 int boxWitdthWithoutOneMargin = boxWidth - paddingWidth - borderCharWidth;
 
-                int limit = boxWidth - 2 * paddingWidth - 10;
+                int limit = boxWidth - 2 * paddingWidth - 2 * borderCharWidth;// - 10;
                 string[] words = inputString.Split(' ');
 
                 StringBuilder newSentence = new StringBuilder();

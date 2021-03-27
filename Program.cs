@@ -572,11 +572,22 @@ namespace KATE_text_game
             }
 
             #endregion
-            foreach (string str in GetStringInABox("Instructions: You can Go, Look, Examine(x), Drop, Get/Take with the subject. " +
+
+            Console.WindowWidth = 80;
+
+            List<string> instructionsMessage = GetStringInABox("Instructions: You can Go, Look, Examine(x), Drop, Get/Take with the subject. " +
                 "To see available locations, write Go without subject. To see your inventory, write Inventory(i). " +
-                "(Case of commands does not matter)", 50, 'Z', 2, "center"))
+                "(Case of commands does not matter)", 50, 'Z', 2, "center");
+
+            int topMargin = (Console.WindowHeight - instructionsMessage.Count) / 2;
+
+            for (int i = 0; i < topMargin; i++)
+                Console.WriteLine();
+
+            foreach (string str in instructionsMessage)
                 Console.WriteLine(str);
 
+            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write(new string(' ', (Console.WindowWidth - 22) / 2) + "PRESS ANY KEY TO START");
             Console.ForegroundColor = ConsoleColor.Gray;

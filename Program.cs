@@ -30,7 +30,7 @@ namespace KATE_text_game
                      lighthouse = new Location("lighthouse", "a lighthouse") { ItemList = new List<Item> { } },
                      cropfield = new Location("cropfield", "a cropfield") { ItemList = new List<Item> { } };
 
-            #region descriptions, avalaible locations and directions
+            #region descriptions, avalaible locations, directions and ascii art
 
             field.Desc = "It's a field with tall grass and yarrow. There is a small house nearby.";
             house.Desc = "It's a small wooden house made out of thin wood planks. There are few lattice windows and a table with a note. There is a chest next to one of the walls.";
@@ -133,6 +133,30 @@ namespace KATE_text_game
                 { "east", village }
             };
 
+            field.AsciiArt = new string[] {
+@"          ╬                                                                 /\  ",
+@"         ═@═                          ______                         /\  /\ /\ /",
+@"          ░                          /  \   \                     /\  /\/\/\/\/\",
+@"          █   /\           //,,.//. /____\   \ ,,//..,,/////..,,/\ /\ /\ /\ /\ /",
+@"\\ ,,////\░ /\/\ ____..--/         ║██████░░░░  ,         ////\/\      /\/\/\/\ ",
+@" ,,.. ,,  ..                       ║██╔╗██░░░░ ,    ,,    ,,   ,,,/\      /\/\/\",
+@"       °      °    \\\        ° °°°║██╚╝██░░░░ ,,//   ,,,||\\°°...°  °°     /\  ",
+@" || ,,,  °,,   //  ° °        ...  ║██████░░░░  |^^ °° °...  , ,. .,         /\ ",
+@"  ,, \\         \\  ^^^   ...  '''   ..  \\  ---  ,,,  ;;    °  °°  '''   ''    ",
+@" °°,,,       °   °      °°     ,,,,, //        \\            ,,,     ,,      .. "};
+            seaside.AsciiArt = new string[]
+            {
+@"                                 |                                        /\/\/\",
+@"                                ╔╩╗                                    /\/\/\/\/",
+@"                              ═╦░@░╦═                    /\   /\ /\/\  /\ /\ /\ ",
+@"                               ╚███╝                     /\  /\/\   /\/\    /\ /",
+@"                                ░░░__               -.// /\ /\/\/\/\   /\/\     ",
+@"                                ███__/\        ..--// | //    //          ,//,, ",
+@"________________________________░░░██__║_..--//^^=.='//    ==  /// //     /\    ",
+@"____  ---         ---       ..__███/                       ///,,, ,,///  /\ /\  ",
+@"    ^^^--______ ---   ___ ___--/  . .            .  . .. ... ..     ///,,/,/,,// ",
+@"           ^^^^----^^^          . . .  ....   .                                 "};
+
             #endregion
 
             #endregion
@@ -230,6 +254,9 @@ namespace KATE_text_game
                     // element exists, do what you need
                     player.Loc = player.Loc.AvailableLocations[index];
                     Console.Clear();
+
+                    Console.WriteLine();
+                    Console.WriteLine(GetLocationImage());
                     Print(GetLocationDescription());
                 }
                 else
@@ -424,6 +451,14 @@ namespace KATE_text_game
 
             }
 
+            string GetLocationImage()
+            {
+                StringBuilder imageString = new StringBuilder();
+                foreach (string str in player.Loc.AsciiArt)
+                    imageString.Append(str);
+                return imageString.ToString();
+            }
+
             #endregion
 
             string input = "placeholder";
@@ -537,6 +572,7 @@ namespace KATE_text_game
 
             WordWrapInABox("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 40, 'X', 2, "center");
 
+            Console.WriteLine(GetLocationImage());
             PrintLine("You wake up.");
             Print(GetLocationDescription());
             Console.Write(GetAvailableLocations());

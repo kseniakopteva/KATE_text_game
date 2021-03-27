@@ -17,6 +17,14 @@ namespace KATE_text_game
         List<Item> itemList;
         List<Location> availableLocations;
 
+        string[] asciiArt;
+
+        public string[] AsciiArt
+        {
+            get { return asciiArt; }
+            set { asciiArt = value; }
+        }
+
         public List<Location> AvailableLocations
         {
             set => availableLocations = value;

@@ -570,7 +570,11 @@ namespace KATE_text_game
 
             #endregion
 
-            WordWrapInABox("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", 40, 'X', 2, "center");
+            WordWrapInABox("Instructions: You can Go, Look, Examine(x), Drop, Get/Take with the subject. " +
+                "To see available locations, write Go without subject. To see your inventory, write Inventory(i). " +
+                "(Case of commands does not matter)", 50, 'Z', 2, "center");
+
+            Console.ReadKey();
 
             Console.WriteLine(GetLocationImage());
             PrintLine("You wake up.");

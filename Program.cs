@@ -255,8 +255,12 @@ namespace KATE_text_game
                     player.Loc = player.Loc.AvailableLocations[index];
                     Console.Clear();
 
-                    Console.WriteLine();
-                    Console.WriteLine(GetLocationImage());
+                    if (player.Loc.AsciiArt != null)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine(GetLocationImage());
+                    }
+
                     Print(GetLocationDescription());
                 }
                 else
@@ -574,8 +578,14 @@ namespace KATE_text_game
                 "To see available locations, write Go without subject. To see your inventory, write Inventory(i). " +
                 "(Case of commands does not matter)", 50, 'Z', 2, "center");
 
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write(new string(' ', (Console.WindowWidth - 22) / 2) + "PRESS ANY KEY TO START");
+            Console.ForegroundColor = ConsoleColor.Gray;
+
             Console.ReadKey();
 
+            Console.Clear();
+            Console.WriteLine();
             Console.WriteLine(GetLocationImage());
             PrintLine("You wake up.");
             Print(GetLocationDescription());

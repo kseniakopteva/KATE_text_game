@@ -189,21 +189,36 @@ namespace KATE_text_game
                 switch (dest)
                 {
                     case "north":
+                    case "n":
                         dest = player.Loc.directions["north"].Tag;
                         break;
                     case "south":
+                    case "s":
                         dest = player.Loc.directions["south"].Tag;
                         break;
                     case "west":
+                    case "w":
                         dest = player.Loc.directions["west"].Tag;
                         break;
                     case "east":
+                    case "e":
                         dest = player.Loc.directions["east"].Tag;
                         break;
                     case "out":
                     case "outside":
                         if (player.Loc.Tag == "windmill" || player.Loc.Tag == "house" || player.Loc.Tag == "lighthouse" || player.Loc.Tag == "cave")
                             dest = player.Loc.AvailableLocations.ElementAt(0).Tag;
+                        break;
+                    case "in":
+                    case "inside":
+                        if (player.Loc.Tag == "meadow")
+                            dest = "windmill";
+                        else if (player.Loc.Tag == "field")
+                            dest = "house";
+                        else if (player.Loc.Tag == "seaside")
+                            dest = "lighthouse";
+                        else if (player.Loc.Tag == "forest")
+                            dest = "cave";
                         break;
                     default:
                         break;
@@ -475,7 +490,7 @@ namespace KATE_text_game
                         Console.WriteLine("You can't drop it!");
                     }
                 }
-                else if (action == "examine")
+                else if (action == "examine" || action == "x")
                 {
                     string itemDesc;
 
@@ -495,11 +510,11 @@ namespace KATE_text_game
                         Console.WriteLine(char.ToUpper(itemDesc[0]) + itemDesc.Substring(1) + ".");
                     }
                 }
-                else if (action == "inventory")
+                else if (action == "inventory" || action == "i")
                 {
                     Console.Write(player.GetInventory());
                 }
-                else if (action == "quit")
+                else if (action == "quit" || action == "q")
                 {
                     if (ExecuteQuitGame())
                         return false;

@@ -18,17 +18,17 @@ namespace KATE_text_game
 
             #region Initializing locations
 
-            Location field = new Location("field", "a field") { itemList = new List<Item>() { hat, sword } },
-                     house = new Location("house", "a house") { itemList = new List<Item> { } },
-                     forest = new Location("forest", "a forest") { itemList = new List<Item> { } },
-                     village = new Location("village", "a village") { itemList = new List<Item> { } },
-                     seaside = new Location("seaside", "a seaside") { itemList = new List<Item> { sand } },
-                     meadow = new Location("meadow", "a meadow") { itemList = new List<Item> { } },
-                     windmill = new Location("windmill", "a windmill") { itemList = new List<Item> { } },
-                     hill = new Location("hill", "a hill") { itemList = new List<Item> { } },
-                     cave = new Location("cave", "a cave") { itemList = new List<Item> { } },
-                     lighthouse = new Location("lighthouse", "a lighthouse") { itemList = new List<Item> { } },
-                     cropfield = new Location("cropfield", "a cropfield") { itemList = new List<Item> { } };
+            Location field = new Location("field", "a field") { ItemList = new List<Item>() { hat, sword } },
+                     house = new Location("house", "a house") { ItemList = new List<Item> { } },
+                     forest = new Location("forest", "a forest") { ItemList = new List<Item> { } },
+                     village = new Location("village", "a village") { ItemList = new List<Item> { } },
+                     seaside = new Location("seaside", "a seaside") { ItemList = new List<Item> { sand } },
+                     meadow = new Location("meadow", "a meadow") { ItemList = new List<Item> { } },
+                     windmill = new Location("windmill", "a windmill") { ItemList = new List<Item> { } },
+                     hill = new Location("hill", "a hill") { ItemList = new List<Item> { } },
+                     cave = new Location("cave", "a cave") { ItemList = new List<Item> { } },
+                     lighthouse = new Location("lighthouse", "a lighthouse") { ItemList = new List<Item> { } },
+                     cropfield = new Location("cropfield", "a cropfield") { ItemList = new List<Item> { } };
 
             #region descriptions, avalaible locations and directions
 
@@ -44,17 +44,17 @@ namespace KATE_text_game
             lighthouse.Desc = "It's a small room. You see light coming from above. There's nothing much here.";
             cropfield.Desc = "It's a cropfield with wheat.";
 
-            field.availableLocations = new List<Location> { house, forest, hill, meadow, seaside };
-            house.availableLocations = new List<Location> { field };
-            forest.availableLocations = new List<Location> { field, cave };
-            village.availableLocations = new List<Location> { cropfield, hill };
-            seaside.availableLocations = new List<Location> { field, lighthouse };
-            meadow.availableLocations = new List<Location> { windmill, field, seaside };
-            windmill.availableLocations = new List<Location> { meadow };
-            hill.availableLocations = new List<Location> { village, field, cropfield, forest };
-            cave.availableLocations = new List<Location> { forest };
-            lighthouse.availableLocations = new List<Location> { seaside };
-            cropfield.availableLocations = new List<Location> { hill, village, meadow };
+            field.AvailableLocations = new List<Location> { house, forest, hill, meadow, seaside };
+            house.AvailableLocations = new List<Location> { field };
+            forest.AvailableLocations = new List<Location> { field, cave };
+            village.AvailableLocations = new List<Location> { cropfield, hill };
+            seaside.AvailableLocations = new List<Location> { field, lighthouse };
+            meadow.AvailableLocations = new List<Location> { windmill, field, seaside };
+            windmill.AvailableLocations = new List<Location> { meadow };
+            hill.AvailableLocations = new List<Location> { village, field, cropfield, forest };
+            cave.AvailableLocations = new List<Location> { forest };
+            lighthouse.AvailableLocations = new List<Location> { seaside };
+            cropfield.AvailableLocations = new List<Location> { hill, village, meadow };
 
             field.directions = new Dictionary<string, Location> {
                 { "north", seaside },
@@ -172,10 +172,10 @@ namespace KATE_text_game
                     Print(GetLocationDescription());
                 else
                 {
-                    int index = player.Loc.availableLocations.FindIndex(item => item.Tag == dest);
+                    int index = player.Loc.AvailableLocations.FindIndex(item => item.Tag == dest);
                     if (index >= 0)
                     {
-                        Console.WriteLine(player.Loc.availableLocations[index].Desc);
+                        Console.WriteLine(player.Loc.AvailableLocations[index].Desc);
                     }
                     else
                         Console.WriteLine("ERROR");
@@ -203,17 +203,17 @@ namespace KATE_text_game
                     case "out":
                     case "outside":
                         if (player.Loc.Tag == "windmill" || player.Loc.Tag == "house" || player.Loc.Tag == "lighthouse" || player.Loc.Tag == "cave")
-                            dest = player.Loc.availableLocations.ElementAt(0).Tag;
+                            dest = player.Loc.AvailableLocations.ElementAt(0).Tag;
                         break;
                     default:
                         break;
                 }
 
-                int index = player.Loc.availableLocations.FindIndex(item => item.Tag == dest);
+                int index = player.Loc.AvailableLocations.FindIndex(item => item.Tag == dest);
                 if (index >= 0)
                 {
                     // element exists, do what you need
-                    player.Loc = player.Loc.availableLocations[index];
+                    player.Loc = player.Loc.AvailableLocations[index];
                     Console.Clear();
                     Print(GetLocationDescription());
                 }
@@ -233,7 +233,7 @@ namespace KATE_text_game
                 else
                     desc.Append($"You are in {player.Loc.Name}. {player.Loc.Desc}");
 
-                if (player.Loc.itemList.Count != 0)
+                if (player.Loc.ItemList.Count != 0)
                 {
                     desc.Append(" " + GetAvailableItems());
                 }
@@ -247,7 +247,7 @@ namespace KATE_text_game
                 StringBuilder locs = new StringBuilder();
 
                 locs.AppendLine("You can go to: ");
-                foreach (Location loc in player.Loc.availableLocations)
+                foreach (Location loc in player.Loc.AvailableLocations)
                 {
                     string locationKey = player.Loc.directions.FirstOrDefault(location => location.Value == loc).Key;
 
@@ -264,16 +264,16 @@ namespace KATE_text_game
             }
             string GetAvailableItems()
             {
-                if (player.Loc.itemList.Count != 0)
+                if (player.Loc.ItemList.Count != 0)
                 {
                     // TODO: "There are ..., ..., ... AND ... on the ground."
 
                     StringBuilder items = new StringBuilder("");
 
-                    if (player.Loc.itemList.Count == 1)
-                        items.Append($"There is {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+                    if (player.Loc.ItemList.Count == 1)
+                        items.Append($"There is {string.Join(", ", from item in player.Loc.ItemList select item.Name)} on the ground.");
                     else
-                        items.Append($"There are {string.Join(", ", from item in player.Loc.itemList select item.Name)} on the ground.");
+                        items.Append($"There are {string.Join(", ", from item in player.Loc.ItemList select item.Name)} on the ground.");
 
                     return items.ToString();
                 }
@@ -451,12 +451,12 @@ namespace KATE_text_game
                 }
                 else if (action == "get" || action == "take")
                 {
-                    int index = player.Loc.itemList.FindIndex(item => item.Tag == dest);
+                    int index = player.Loc.ItemList.FindIndex(item => item.Tag == dest);
                     if (index >= 0)
                     {
                         // element exists, do what you need
-                        Console.WriteLine("You got a " + player.Loc.itemList[index].Name + "! It is " + player.Loc.itemList[index].Desc + ".");
-                        player.AddItem(player.Loc.itemList[index]);
+                        Console.WriteLine("You got a " + player.Loc.ItemList[index].Name + "! It is " + player.Loc.ItemList[index].Desc + ".");
+                        player.AddItem(player.Loc.ItemList[index]);
                     }
                     else
                         Console.WriteLine("You can't " + action + " this!");
@@ -482,8 +482,8 @@ namespace KATE_text_game
                     int index = player.inventory.FindIndex(item => item.Tag == dest);
                     if (index < 0)
                     {
-                        index = player.Loc.itemList.FindIndex(item => item.Tag == dest);
-                        itemDesc = player.Loc.itemList[index].Desc;
+                        index = player.Loc.ItemList.FindIndex(item => item.Tag == dest);
+                        itemDesc = player.Loc.ItemList[index].Desc;
                     }
                     else
                     {

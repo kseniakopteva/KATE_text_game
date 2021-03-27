@@ -13,9 +13,21 @@ namespace KATE_text_game
         string desc;
 
         // TODO: change public to private
-        public List<Item> itemList;
         public Dictionary<string, Location> directions;
-        public List<Location> availableLocations;
+        List<Item> itemList;
+        List<Location> availableLocations;
+
+        public List<Location> AvailableLocations
+        {
+            set => availableLocations = value;
+            get => availableLocations;
+        }
+
+        public List<Item> ItemList
+        {
+            set => itemList = value;
+            get => itemList;
+        }
 
         public Location(string tag, string name)
         {

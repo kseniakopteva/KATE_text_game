@@ -20,12 +20,12 @@ namespace KATE_text_game
         public void AddItem(Item item)
         {
             inventory.Add(item);
-            loc.itemList.Remove(item);
+            loc.ItemList.Remove(item);
         }
         public void RemoveItem(Item item)
         {
             inventory.Remove(item);
-            loc.itemList.Add(item);
+            loc.ItemList.Add(item);
         }
 
         public string GetInventory()

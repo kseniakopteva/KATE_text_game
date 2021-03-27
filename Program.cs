@@ -393,7 +393,7 @@ namespace KATE_text_game
                 TypeOut(newSentence.ToString());
             }
 
-            void WordWrapInABox(string inputString, int boxWidth, char borderChar, int paddingWidth, string alignment)
+            List<string> GetStringInABox(string inputString, int boxWidth, char borderChar, int paddingWidth, string alignment)
             {
                 //int boxWidth = 40;
                 //char borderChar = '/';
@@ -422,12 +422,12 @@ namespace KATE_text_game
                 int limit = boxWidth - 2 * paddingWidth - 2 * borderCharWidth;// - 10;
                 string[] words = inputString.Split(' ');
 
-                StringBuilder newSentence = new StringBuilder();
+                List<string> newSentence = new List<string> { };
 
-                Console.WriteLine(new string(' ', leftMarginWidth) + new string(borderChar, boxWidth));
+                newSentence.Add(new string(' ', leftMarginWidth) + new string(borderChar, boxWidth));
                 for (int i = 0; i < paddingWidth - 1; i++)
                 {
-                    Console.WriteLine(new string(' ', leftMarginWidth) + borderChar + new string(' ', boxWidthWithoutMargins) + borderChar);
+                    newSentence.Add(new string(' ', leftMarginWidth) + borderChar + new string(' ', boxWidthWithoutMargins) + borderChar);
 
                     string line = "";
 
@@ -435,7 +435,7 @@ namespace KATE_text_game
                     {
                         if ((line + word).Length > limit)
                         {
-                            newSentence.AppendLine(new string(' ', leftMarginWidth) + borderChar + new string(' ', paddingWidth) + line + new string(' ', boxWidthWithoutMargins - borderCharWidth - borderCharWidth - line.Length) + borderChar);
+                            newSentence.Add(new string(' ', leftMarginWidth) + borderChar + new string(' ', paddingWidth) + line + new string(' ', boxWidthWithoutMargins - borderCharWidth - borderCharWidth - line.Length) + borderChar);
                             line = "";
                         }
                         line += string.Format("{0} ", word);
@@ -443,16 +443,15 @@ namespace KATE_text_game
 
                     if (line.Length > 0)
                     {
-                        newSentence.AppendLine(new string(' ', leftMarginWidth) + borderChar + new string(' ', paddingWidth) + line + new string(' ', boxWidthWithoutMargins - borderCharWidth - borderCharWidth - line.Length) + borderChar);
+                        newSentence.Add(new string(' ', leftMarginWidth) + borderChar + new string(' ', paddingWidth) + line + new string(' ', boxWidthWithoutMargins - borderCharWidth - borderCharWidth - line.Length) + borderChar);
                     }
                 }
 
                 for (int j = 0; j < paddingWidth - 1; j++)
-                    newSentence.AppendLine(new string(' ', leftMarginWidth) + borderChar + new string(' ', boxWidthWithoutMargins) + borderChar);
-                newSentence.AppendLine(new string(' ', leftMarginWidth) + new string(borderChar, boxWidth));
+                    newSentence.Add(new string(' ', leftMarginWidth) + borderChar + new string(' ', boxWidthWithoutMargins) + borderChar);
+                newSentence.Add(new string(' ', leftMarginWidth) + new string(borderChar, boxWidth));
 
-                Console.WriteLine(newSentence.ToString());
-
+                return newSentence;
             }
 
             string GetLocationImage()
@@ -573,10 +572,10 @@ namespace KATE_text_game
             }
 
             #endregion
-
-            WordWrapInABox("Instructions: You can Go, Look, Examine(x), Drop, Get/Take with the subject. " +
+            foreach (string str in GetStringInABox("Instructions: You can Go, Look, Examine(x), Drop, Get/Take with the subject. " +
                 "To see available locations, write Go without subject. To see your inventory, write Inventory(i). " +
-                "(Case of commands does not matter)", 50, 'Z', 2, "center");
+                "(Case of commands does not matter)", 50, 'Z', 2, "center"))
+                Console.WriteLine(str);
 
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write(new string(' ', (Console.WindowWidth - 22) / 2) + "PRESS ANY KEY TO START");

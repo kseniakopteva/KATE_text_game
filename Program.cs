@@ -472,7 +472,7 @@ namespace KATE_text_game
             }
             bool ParseAndExecute(string Input)
             {
-                string[] inpTok = Input.Split(' ');
+                string[] inpTok = Input.ToLower().Split(' ');
                 string action = inpTok[0];
 
                 if (inpTok.Length > 2)

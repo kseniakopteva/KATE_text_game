@@ -16,10 +16,59 @@ namespace KATE_text_game
             Item sword = new Item("sword", "A SWORD", "a rusty sword");
             Item sand = new Item("sand", "SAND", "a small handful of sand");
 
+            Map map = new Map("map", "A MAP", "a dusty hand-drawn map")
+            {
+                MapImage = new List<string>() {
+
+                @"................................................................................",
+                @"            ---                                __----__         |   ,,          ",
+                @"         N                   ---           .-^^  /\/\  \..      .      ,,       ",
+                @"        _|_        ---                     \  ,,    /\/\  |     /               ",
+                @"      .^ | ^.                      ---     /    ,,    ___/     \            ,,  ",
+                @"  W__/___|___\__E                          ^^--_____-^          |   /\ /\       ",
+                @"     \   |   /          ---      _|_      .--._                /     /\ /\/\    ",
+                @"      ^._|_.^                   _|@|_     \___/             ...    /\ /\/\/\    ",
+                @"---      |                       |\|                     --^   /\ /\/\/\/ \/\   ",
+                @"         S                       | |_    ____---------^^            /\ /\/\/\ /\",
+                @"               ---             __|\|/\ -^ ..               /\ /\/\/\ /\/\ /\/\  ",
+                @"                     ---     ^   |_|__|           /\/\ /\/\ /\/\/\  /\/\/\/\/\ /",
+                @"          ---               -  ..     ..    ,, /\  /\ /\ /\/\/\/\ /\/\/\/\/ /\/\",
+                @"                           ^    lighthouse          /\/\/\/\/\ /\/\/\/\  /\/\   ",
+                @"                  ---     / ..                   /\   /\ /\/\/\/\   /\/\  /\/\/\",
+                @"                          |.     ,,         ,,    /\/\/\/\/ _forest_  /\/\  /\/\",
+                @" ---                     /                    /\     /\/\ /\/\/\  /\/\/\    /\/\",
+                @"       ---            /^^ .            ,,        /\    /\/\ /\  /\  /\/\/\ /\/\ ",
+                @"           _______-^^ _seaside_       ___            /\  /\/\/\/\/\ /\/\ /\/\/\/",
+                @"_____---^^^       ..            ,,   / \_\     ,,       /\ /\   .___   /\ /\/\  ",
+                @"           ,,                       |_H_|_| ,,           /\   .//  \\    /\/\/\/",
+                @"                 ,,         ,,                 ,,      /\    /// _\\\\..    /\/\",
+                @"      X   X  °                      house ,,                cave         /\/\ /\",
+                @" °,,   /X\  ,, _meadow_       _field_,,         ,,       /\ /\ /\/\/\/\ /\/\ /\ ",
+                @"      X| |X     °                                             /\/\/\ /\/\/\  /\ ",
+                @"  °   /_H_\ ° ,,  °    ,,     ,,     ..,,,..         ,,    /\  /\/\/\ /\/\ /\/\/",
+                @" °  ,,          °   °            _-^^       ^^-_             /\ /\/\/\/\/\  /\/\",
+                @"    windmill    ,,       ,,     /      ,,       \  ,,       /\/\/\  /\/\  /\/\  ",
+                @"  ,,                          .-  ,,        ,,   ^.            /\ /\ /\ /\ /\/\/",
+                @"      ,,          ,,      ..^^      _hill_         -..             /\    /\     ",
+                @"           ,,                                            ,,            /\  /\/\ ",
+                @"      ,,        ,,           ,,               ,,                ,,         ,,   ",
+                @"    _O_               ,,                                                        ",
+                @"     U                            ╬_   =             ___           ,,     ,,    ",
+                @"==   |    _cropfield_   ,,       /\ \       ___  =  /_/ \                    _--",
+                @"||                              |HH| |_ =  / \_\   | | H | =            .--^^   ",
+                @"==   ==||==||==||==  ,,         |  |/\ \  |_H_|_|  |_|___|   ,,       .-      ,,",
+                @"||   ||==||==||==||         ==  |_____|_|     ___  ==               .-  ,,      ",
+                @"==   ==||==||==||==      ==         =    ==  /_/ \    ==        ..^^        ,,  ",
+                @"||   ||==||==||==||         = _village_  =  |_|_H_|  =     ,,        ,,         ",
+                @"................................................................................"
+
+            }
+            };
+
             #region Initializing locations
 
             Location field = new Location("field", "a field") { ItemList = new List<Item>() { hat, sword } },
-                     house = new Location("house", "a house") { ItemList = new List<Item> { } },
+                     house = new Location("house", "a house") { ItemList = new List<Item> { map } },
                      forest = new Location("forest", "a forest") { ItemList = new List<Item> { } },
                      village = new Location("village", "a village") { ItemList = new List<Item> { } },
                      seaside = new Location("seaside", "a seaside") { ItemList = new List<Item> { sand } },
@@ -451,6 +500,11 @@ namespace KATE_text_game
                     newSentence.Add(new string(' ', leftMarginWidth) + borderChar + new string(' ', boxWidthWithoutMargins) + borderChar);
                 newSentence.Add(new string(' ', leftMarginWidth) + new string(borderChar, boxWidth));
 
+                // TODO: get rid of "- 2" magical number
+                int topMargin = (Console.WindowHeight - newSentence.Count - 2) / 2;
+
+                newSentence.Insert(0, new string('\n', topMargin));
+
                 return newSentence;
             }
 
@@ -536,23 +590,47 @@ namespace KATE_text_game
                 }
                 else if (action == "examine" || action == "x")
                 {
-                    string itemDesc;
+                    string itemDesc = "";
 
                     int index = player.inventory.FindIndex(item => item.Tag == dest);
                     if (index < 0)
                     {
                         index = player.Loc.ItemList.FindIndex(item => item.Tag == dest);
-                        itemDesc = player.Loc.ItemList[index].Desc;
+                        if (index < 0)
+                        {
+                            Console.WriteLine("You can't examine that.");
+                            return true;
+                        }
+                        else
+                        {
+                            itemDesc = player.Loc.ItemList[index].Desc;
+                        }
                     }
                     else
                     {
                         itemDesc = player.inventory[index].Desc;
                     }
 
-                    if (index >= 0)
+                    Console.WriteLine(char.ToUpper(itemDesc[0]) + itemDesc.Substring(1) + ".");
+
+                    if (dest == map.Tag)
                     {
-                        Console.WriteLine(char.ToUpper(itemDesc[0]) + itemDesc.Substring(1) + ".");
+                        Console.Clear();
+                        List<string> mapOpenMessage = GetStringInABox("[USE UP AND DOWN ARROW KEYS TO MOVE, ESC KEY TO CLOSE] PRESS DOWN ARROW", 60, '/', 2, "center");
+
+                        foreach (string str in mapOpenMessage)
+                            Console.WriteLine(str);
+
+                        ConsoleKeyInfo inputChar;
+                        do
+                        {
+                            inputChar = Console.ReadKey();
+                            map.OpenMap(inputChar);
+                        }
+                        while (inputChar.Key != ConsoleKey.Escape);
+                        Console.Clear();
                     }
+
                 }
                 else if (action == "inventory" || action == "i")
                 {
@@ -579,11 +657,6 @@ namespace KATE_text_game
                 "To see available locations, write Go without subject. To see your inventory, write Inventory(i). " +
                 "(Case of commands does not matter)", 50, 'Z', 2, "center");
 
-            int topMargin = (Console.WindowHeight - instructionsMessage.Count) / 2;
-
-            for (int i = 0; i < topMargin; i++)
-                Console.WriteLine();
-
             foreach (string str in instructionsMessage)
                 Console.WriteLine(str);
 
@@ -599,6 +672,7 @@ namespace KATE_text_game
             Console.WriteLine(GetLocationImage());
             PrintLine("You wake up.");
             Print(GetLocationDescription());
+
             Console.Write(GetAvailableLocations());
 
             while (GetInput() && ParseAndExecute(input)) ;

@@ -8,9 +8,9 @@ namespace KATE_text_game
 {
     class Item
     {
-        string tag;
-        string name;
-        string desc;
+        protected string tag;
+        protected string name;
+        protected string desc;
 
         public Item(string tag, string name, string desc)
         {

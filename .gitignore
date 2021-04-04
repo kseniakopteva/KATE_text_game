@@ -9,3 +9,6 @@
 **/Debug/**/*.tlog
 **/.vs/
 obj
+**/Release/*.exe.config
+**/Release/*.pdb
+**/Release/*.exe

@@ -45,5 +45,9 @@ namespace KATE_text_game
 
             return str.ToString();
         }
+
+        List<Location> visitedLocations = new List<Location> { };
+        public List<Location> VisitedLocations { get => visitedLocations; set => visitedLocations = value; }
+
     }
 }

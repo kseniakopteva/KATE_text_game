@@ -82,7 +82,7 @@ namespace KATE_text_game
             #region descriptions, avalaible locations, directions and ascii art
 
             field.Desc = "It's a field with tall grass and yarrow. There is a small house nearby.";
-            house.Desc = "It's a small wooden house made out of thin wood planks. There are few lattice windows and a table with a note. There is a chest next to one of the walls.";
+            house.Desc = "It's a small wooden house made out of thin wood planks. There are few lattice windows and a table. There is a chest next to one of the walls.";
             forest.Desc = "It's a dense forest with barely any light. There is a cave in the raised ground.";
             village.Desc = "It's a small village with quite a few people.";
             seaside.Desc = "It's a seaside with a few trees and a rocky beach. You hear the sea waves crushing on the shore. It is windy out here. You see a sky-high black and white lighthouse.";
@@ -211,6 +211,7 @@ namespace KATE_text_game
             #endregion
 
             Player player = new Player(field);
+            player.VisitedLocations.Add(player.Loc);
 
             #region methods
 
@@ -242,16 +243,16 @@ namespace KATE_text_game
             bool ExecuteLook(string dest)
             {
                 if (dest == "around" || dest == player.Loc.Tag)
-                    Print(GetLocationDescription());
+                    Console.Write(GetLocationDescription());
                 else
                 {
                     int index = player.Loc.AvailableLocations.FindIndex(item => item.Tag == dest);
                     if (index >= 0)
                     {
-                        Console.WriteLine(player.Loc.AvailableLocations[index].Desc);
+                        Console.WriteLine(char.ToUpper(player.Loc.AvailableLocations[index].Name[0]) + player.Loc.AvailableLocations[index].Name.Substring(1) + ". You can't see much more from here.");
                     }
                     else
-                        Console.WriteLine("ERROR");
+                        Console.WriteLine("You can't see that.");
                 }
 
                 return true;
@@ -310,11 +311,18 @@ namespace KATE_text_game
                         Console.WriteLine(GetLocationImage());
                     }
 
-                    Print(GetLocationDescription());
+                    if (player.VisitedLocations.Contains(player.Loc))
+                        Console.Write(GetLocationDescription());
+                    else
+                        Print(GetLocationDescription());
+
+                    if (!player.VisitedLocations.Contains(player.Loc))
+                        player.VisitedLocations.Add(player.Loc);
                 }
                 else
                 {
                     Console.WriteLine("You can't go there.");
+                    return false;
                 }
                 return true;
             }
@@ -366,9 +374,16 @@ namespace KATE_text_game
                     StringBuilder items = new StringBuilder("");
 
                     if (player.Loc.ItemList.Count == 1)
-                        items.Append($"There is {string.Join(", ", from item in player.Loc.ItemList select item.Name)} on the ground.");
+                        items.Append($"There is {string.Join(", ", from item in player.Loc.ItemList select item.Name)}");// on the ground.");
                     else
-                        items.Append($"There are {string.Join(", ", from item in player.Loc.ItemList select item.Name)} on the ground.");
+                        items.Append($"There are {string.Join(", ", from item in player.Loc.ItemList select item.Name)}");
+
+                    if (player.Loc == field || player.Loc == forest || player.Loc == hill || player.Loc == meadow || player.Loc == village)
+                        items.Append(" on the grass.");
+                    else if (player.Loc == house)
+                        items.Append(" on the table.");
+                    else
+                        items.Append(" on the ground.");
 
                     return items.ToString();
                 }
@@ -616,10 +631,12 @@ namespace KATE_text_game
                     if (dest == map.Tag)
                     {
                         Console.Clear();
-                        List<string> mapOpenMessage = GetStringInABox("[USE UP AND DOWN ARROW KEYS TO MOVE, ESC KEY TO CLOSE] PRESS DOWN ARROW", 60, '/', 2, "center");
+                        List<string> mapOpenMessage = GetStringInABox("Opening Map: [USE UP AND DOWN ARROW KEYS TO MOVE, ESC KEY TO CLOSE] (Press down arrow to continue)", 60, '#', 2, "center");
 
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
                         foreach (string str in mapOpenMessage)
                             Console.WriteLine(str);
+                        Console.ForegroundColor = ConsoleColor.Gray;
 
                         ConsoleKeyInfo inputChar;
                         do
@@ -629,6 +646,8 @@ namespace KATE_text_game
                         }
                         while (inputChar.Key != ConsoleKey.Escape);
                         Console.Clear();
+
+                        Console.Write(GetLocationDescription());
                     }
 
                 }
@@ -665,13 +684,21 @@ namespace KATE_text_game
             Console.Write(new string(' ', (Console.WindowWidth - 22) / 2) + "PRESS ANY KEY TO START");
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            Console.ReadKey();
-
+            ConsoleKeyInfo startKey = Console.ReadKey();
+#if DEBUG
+            if (startKey.Key == ConsoleKey.D)
+                player.VisitedLocations = new List<Location> { field, house, forest, village, seaside, meadow, windmill, hill, cave, lighthouse, cropfield };
+#endif
             Console.Clear();
             Console.WriteLine();
             Console.WriteLine(GetLocationImage());
             PrintLine("You wake up.");
-            Print(GetLocationDescription());
+#if DEBUG
+            if (startKey.Key == ConsoleKey.D)
+                Console.Write(GetLocationDescription());
+            else
+#endif
+                Print(GetLocationDescription());
 
             Console.Write(GetAvailableLocations());
 

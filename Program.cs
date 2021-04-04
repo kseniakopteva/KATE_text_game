@@ -312,7 +312,7 @@ namespace KATE_text_game
                     }
 
                     if (player.VisitedLocations.Contains(player.Loc))
-                        Console.Write(GetLocationDescription());
+                        Console.Write(GetWrappedText(GetLocationDescription(), 80, false));
                     else
                         Print(GetLocationDescription());
 
@@ -393,8 +393,8 @@ namespace KATE_text_game
             #region output methods
 
             // prints text; both typing and wrapping words (easier to write)
-            void PrintLine(string text) { WordWrap(text, 80, true); }
-            void Print(string text) { WordWrap(text, 80, false); }
+            void PrintLine(string text) { TypeOut(GetWrappedText(text, 80, true)); }
+            void Print(string text) { TypeOut(GetWrappedText(text, 80, false)); }
 
             // types out the string letter by letter
             void TypeOut(string text)
@@ -419,7 +419,7 @@ namespace KATE_text_game
                 }
             }
             // wraps the string
-            void WordWrap(string inputString, int limit, bool isNewLineNecessary)
+            string GetWrappedText(string inputString, int limit, bool isNewLineNecessary)
             {
                 limit = 80;
                 string[] words = inputString.Split(' ');
@@ -454,7 +454,7 @@ namespace KATE_text_game
                         newSentence.Append(line);
                 }
 
-                TypeOut(newSentence.ToString());
+                return newSentence.ToString();
             }
 
             List<string> GetStringInABox(string inputString, int boxWidth, char borderChar, int paddingWidth, string alignment)
@@ -647,7 +647,7 @@ namespace KATE_text_game
                         while (inputChar.Key != ConsoleKey.Escape);
                         Console.Clear();
 
-                        Console.Write(GetLocationDescription());
+                        Console.Write(GetWrappedText(GetLocationDescription(), 80, false));
                     }
 
                 }
@@ -695,7 +695,7 @@ namespace KATE_text_game
             PrintLine("You wake up.");
 #if DEBUG
             if (startKey.Key == ConsoleKey.D)
-                Console.Write(GetLocationDescription());
+                Console.Write(GetWrappedText(GetLocationDescription(), 80, false));
             else
 #endif
                 Print(GetLocationDescription());

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace KATE_text_game
 {
@@ -390,6 +392,25 @@ namespace KATE_text_game
                 return null;
             }
 
+            bool SaveGame()
+            {
+                FileStream stream = File.Create("savefile.dat");
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                formatter.Serialize(stream, player);
+                stream.Close();
+                return true;
+            }
+
+            bool LoadGame()
+            {
+                FileStream stream = File.OpenRead("savefile.dat");
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                player = formatter.Deserialize(stream) as Player;
+                return true;
+            }
+
             #region output methods
 
             // prints text; both typing and wrapping words (easier to write)
@@ -659,6 +680,14 @@ namespace KATE_text_game
                 {
                     if (ExecuteQuitGame())
                         return false;
+                }
+                else if (action == "save" || action == "s")
+                {
+                    SaveGame();
+                }
+                else if (action == "load")
+                {
+                    LoadGame();
                 }
                 else
                 {

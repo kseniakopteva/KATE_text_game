@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace KATE_text_game
 {
+    [Serializable]
     class Item
     {
         protected string tag;

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace KATE_text_game
 {
+    [Serializable]
     class Map : Item
     {
+        [NonSerialized]
         List<string> mapImage;
 
         public List<string> MapImage { get => mapImage; set => mapImage = value; }

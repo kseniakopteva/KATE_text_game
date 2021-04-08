@@ -65,10 +65,13 @@ namespace KATE_text_game
             }
             };
 
+            Note firstNote = new Note("#1Note", "a piece of paper with some text", "Hello world!");
+            Note secondNote = new Note("#2Note", "a piece of paper with some text", "Hello world! - 2");
+
             #region Initializing locations
 
-            Location field = new Location("field", "a field") { ItemList = new List<Item>() { hat, sword } },
-                     house = new Location("house", "a house") { ItemList = new List<Item> { map } },
+            Location field = new Location("field", "a field") { ItemList = new List<Item>() { hat, sword, secondNote } },
+                     house = new Location("house", "a house") { ItemList = new List<Item> { map, firstNote } },
                      forest = new Location("forest", "a forest") { ItemList = new List<Item> { } },
                      village = new Location("village", "a village") { ItemList = new List<Item> { } },
                      seaside = new Location("seaside", "a seaside") { ItemList = new List<Item> { sand } },
@@ -579,6 +582,15 @@ namespace KATE_text_game
                 }
                 else if (action == "get" || action == "take")
                 {
+                    //if (dest == "note" && player.Loc.ItemList.Any(x => x is Note))
+                    //{
+                    //    Item foundItem = player.Loc.ItemList.Find(x => x is Note);
+                    //    Note foundNote = foundItem as Note;
+                    //    Console.WriteLine("You got a " + foundNote.Name + "! It is " + foundNote.Desc + ".");
+                    //    player.AddItem(foundNote);
+                    //    return true;
+                    //}
+
                     int index = player.Loc.ItemList.FindIndex(item => item.Tag == dest);
                     if (index >= 0)
                     {
@@ -650,6 +662,28 @@ namespace KATE_text_game
                         Console.Write(GetWrappedText(GetLocationDescription(), 80, false));
                     }
 
+                }
+                else if (action == "read" || action == "r" && dest.ToLower() == "note")
+                {
+                    //if (player.inventory.Any(x => x is Note))
+                    //{
+                    //    List<Note> foundNotes;
+                    //    foreach (Item item in player.inventory)
+                    //    {
+                    //        List<Item> foundItems = player.inventory.FindAll(x => x is Note);
+                    //        foreach (Item element in foundItems)
+                    //        {
+                    //            Note newElement = element as Note;
+                    //        }
+                    //        foundNotes = foundItems as Note;
+                    //        if (foundNote.IsRead == false)
+                    //        {
+                    //            Console.WriteLine(foundNote.GetNoteText());
+                    //            foundNote.IsRead = true;
+                    //        }
+                    //    }
+                    //}
+                    //else { Console.WriteLine("You don't have any notes to read!"); }
                 }
                 else if (action == "inventory" || action == "i")
                 {
